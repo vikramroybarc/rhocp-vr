@@ -1,0 +1,1092 @@
+
+[36m
+*** Info ***
+The following information occurred in the Action '' of type SetupRecoverFileBaseAction.
+
+Using out_ICreep_473K_80MPa_cp/0060 for recovery.[39m
+Currently Setting Up
+  Setting Up Undisplaced Mesh
+    Preparing Mesh
+      Updating Mesh......                                                                [[33m 35.28 s[39m] [[33m  148 MB[39m]
+    Finished Preparing Mesh                                                              [[33m 35.31 s[39m] [[33m  148 MB[39m]
+  Finished Setting Up Undisplaced Mesh                                                   [[33m 35.31 s[39m] [[33m  148 MB[39m]
+  Currently Setting Up Displaced Mesh
+    Preparing Mesh
+      Updating Mesh.....                                                                 [[33m 31.51 s[39m] [[33m  151 MB[39m]
+    Finished Preparing Mesh                                                              [[33m 31.54 s[39m] [[33m  151 MB[39m]
+  Finished Setting Up Displaced Mesh                                                     [[33m 31.54 s[39m] [[33m  151 MB[39m]
+  Initializing
+    Updating Because Mesh Changed
+      Updating Mesh.....                                                                 [[33m 31.30 s[39m] [[33m  254 MB[39m]
+    Finished Updating Because Mesh Changed                                               [[33m 31.30 s[39m] [[33m  254 MB[39m]
+    Currently Updating Because Mesh Changed
+      Updating Mesh.....                                                                 [[33m 30.65 s[39m] [[33m  254 MB[39m]
+    Finished Updating Because Mesh Changed                                               [[33m 30.65 s[39m] [[33m  254 MB[39m]
+    Updating Because Mesh Changed
+      Updating Mesh.....                                                                 [[33m 31.06 s[39m] [[33m  271 MB[39m]
+    Finished Updating Because Mesh Changed                                               [[33m 31.06 s[39m] [[33m  271 MB[39m]
+  Finished Initializing                                                                  [[33m 94.32 s[39m] [[33m  271 MB[39m]
+Finished Setting Up                                                                      [[33m164.46 s[39m] [[33m  271 MB[39m]
+Framework Information:
+MOOSE Version:           git commit 8f3b43657e on 2025-01-24
+LibMesh Version:         
+PETSc Version:           3.22.1
+SLEPc Version:           3.22.1
+Current Time:            Thu Jun 19 16:24:48 2025
+Executable Timestamp:    Tue Jun 17 15:06:41 2025
+
+Input File(s):
+  /home/vikramr/projects/rhocp-vr-250505/examples/bcc_FeCr/IrradCreep/512g/473K/bcc_pxtal.i
+
+Command Line Argument(s):
+  --recover
+
+Command Line Input Argument(s):
+  sigmaV=80
+  Executioner/end_time=3e7
+  Executioner/TimeStepper/log_dt=0.05
+  Outputs/file_base=out_ICreep_473K_80MPa
+
+Checkpoint:
+  Wall Time Interval:      Every 3600 s
+  User Checkpoint:         Outputs/cp
+  # Checkpoints Kept:      2
+  Execute On:              TIMESTEP_END 
+
+Parallelism:
+  Num Processors:          24
+  Num Threads:             1
+
+Mesh: 
+  Parallel Type:           replicated
+  Mesh Dimension:          3
+  Spatial Dimension:       3
+  Nodes:                   
+    Total:                 4913
+    Local:                 306
+    Min/Max/Avg:           103/306/204
+  Elems:                   
+    Total:                 4096
+    Local:                 173
+    Min/Max/Avg:           166/175/170
+  Num Subdomains:          512
+  Num Partitions:          1
+  Partitioner:             metis
+
+Nonlinear System:
+  Num DOFs:                14739
+  Num Local DOFs:          918
+  Variables:               { "disp_x" "disp_y" "disp_z" } 
+  Finite Element Types:    "LAGRANGE" 
+  Approximation Orders:    "FIRST" 
+
+Auxiliary System:
+  Num DOFs:                495616
+  Num Local DOFs:          20933
+  Variables:               { "strain_xx" "strain_yy" "strain_zz" "stress_xx" "stress_yy" ... "Phi" "phi_2" 
+                             "rho_m" "rho_i" "Ep_eff" } "eeq" { "gslipr_1" "gslipr_2" "gslipr_3" "gslipr_4" 
+                             "gslipr_5" ... "cslipr_20" "cslipr_21" "cslipr_22" "cslipr_23" "cslipr_24" 
+                             } { "cstrainfrac1" "cstrainfrac2" } { "Nloop_1" "Nloop_2" "Nloop_3" "Nloop_4" 
+                             "Nloop_5" ... "dloop_20" "dloop_21" "dloop_22" "dloop_23" "dloop_24" } 
+  Finite Element Types:    "MONOMIAL" "MONOMIAL" "MONOMIAL" "MONOMIAL" "MONOMIAL" 
+  Approximation Orders:    "CONSTANT" "FIRST" "CONSTANT" "FIRST" "CONSTANT" 
+
+Execution Information:
+  Executioner:             Transient
+  TimeStepper:             LogConstantDT
+  TimeIntegrator(s):       ImplicitEuler
+  Solver Mode:             NEWTON
+  PETSc Preconditioner:    lu mat_superlu_dist_fact: SamePattern  mat_superlu_dist_replacetinypivot: true 
+  MOOSE Preconditioner:    SMP
+
+[31mLEGACY MODES ENABLED:[39m
+ This application uses the legacy material output option: material properties are output only on TIMESTEP_END, not INITIAL. To remove this message, set 'use_legacy_material_output' to false in this application. If there are gold output files that contain material property output for which output occurs on INITIAL, then these will generate diffs due to zero values being stored, and these tests should be re-golded.
+[39m
+[31mLEGACY MODES ENABLED:[39m
+ This application uses the legacy initial residual evaluation behavior. The legacy behavior performs an often times redundant residual evaluation before the solution modifying objects are executed prior to the initial (0th nonlinear iteration) residual evaluation. The new behavior skips that redundant residual evaluation unless the parameter Executioner/use_pre_smo_residual is set to true. To remove this message and enable the new behavior, set the parameter 'use_legacy_initial_residual_evaluation_behavior' to false in *App.C. Some tests that rely on the side effects of the legacy behavior may fail/diff and should be re-golded.
+[39m
+
+Time Step 61, time = 4.45625e+06, dt = 484614
+Currently Executing
+    Computing Pre-SMO Residual
+      Computing Residual                                                                 [[33m  5.20 s[39m] [[33m  308 MB[39m]
+ * Nonlinear |R| = [32m9.989203e-05[39m (Before preset BCs, predictors, correctors, and constraints)
+    Finished Computing Pre-SMO Residual                                                  [[33m  5.22 s[39m] [[33m  308 MB[39m]
+  Applying predictor with scale factor = 1
+    Computing Jacobian                                                                   [[33m  5.33 s[39m] [[33m  310 MB[39m]
+
+    Computing Jacobian                                                                   [[33m  5.26 s[39m] [[33m  333 MB[39m]
+  Finished Solving                                                                       [[33m 93.51 s[39m] [[33m  314 MB[39m]
+[32m Solve Converged![39m
+  Finished Computing User Objects                                                        [[33m  5.22 s[39m] [[33m  315 MB[39m]
+
+Time Step 62, time = 5e+06, dt = 543745
+ * Nonlinear |R| = [32m1.128763e-04[39m (Before preset BCs, predictors, correctors, and constraints)
+  Applying predictor with scale factor = 1
+
+    Computing Residual                                                                   [[33m  5.54 s[39m] [[33m  315 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.19 s[39m] [[33m  315 MB[39m]
+    Computing Residual                                                                   [[33m  5.79 s[39m] [[33m  353 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.17 s[39m] [[33m  353 MB[39m]
+
+    Computing Residual                                                                   [[33m  5.81 s[39m] [[33m  353 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.19 s[39m] [[33m  353 MB[39m]
+    Computing Residual                                                                   [[33m  5.81 s[39m] [[33m  353 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.16 s[39m] [[33m  353 MB[39m]
+    Computing Residual                                                                   [[33m  5.82 s[39m] [[33m  353 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.18 s[39m] [[33m  353 MB[39m]
+    Computing Residual                                                                   [[33m  5.85 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.19 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.80 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.19 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.85 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.17 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.82 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.16 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.77 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.14 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.80 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.17 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.78 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.16 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.85 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.13 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.82 s[39m] [[33m  354 MB[39m]
+  Finished Solving                                                                       [[33m224.83 s[39m] [[33m  354 MB[39m]
+[32m Solve Converged![39m
+Still Executing
+  Finished Computing User Objects                                                        [[33m  6.15 s[39m] [[33m  354 MB[39m]
+
+Time Step 63, time = 5.61009e+06, dt = 610092
+
+    Computing Pre-SMO Residual
+      Computing Residual                                                                 [[33m  5.17 s[39m] [[33m  354 MB[39m]
+ * Nonlinear |R| = [32m1.277808e-04[39m (Before preset BCs, predictors, correctors, and constraints)
+    Finished Computing Pre-SMO Residual                                                  [[33m  5.18 s[39m] [[33m  354 MB[39m]
+  Applying predictor with scale factor = 1
+    Computing Residual                                                                   [[33m  5.88 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.24 s[39m] [[33m  315 MB[39m]
+
+    Computing Residual                                                                   [[33m  5.83 s[39m] [[33m  353 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.20 s[39m] [[33m  353 MB[39m]
+
+    Computing Residual                                                                   [[33m  5.79 s[39m] [[33m  353 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.19 s[39m] [[33m  353 MB[39m]
+
+    Computing Residual                                                                   [[33m  5.82 s[39m] [[33m  353 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.17 s[39m] [[33m  353 MB[39m]
+
+    Computing Residual                                                                   [[33m  5.82 s[39m] [[33m  353 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.20 s[39m] [[33m  353 MB[39m]
+    Computing Residual                                                                   [[33m  5.82 s[39m] [[33m  353 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.20 s[39m] [[33m  353 MB[39m]
+
+    Computing Residual                                                                   [[33m  5.85 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  5.33 s[39m] [[33m  354 MB[39m]
+
+    Computing Residual                                                                   [[33m  5.83 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.18 s[39m] [[33m  354 MB[39m]
+
+    Computing Residual                                                                   [[33m  5.84 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.20 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.80 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.18 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.85 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.19 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.83 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.15 s[39m] [[33m  354 MB[39m]
+
+    Computing Residual                                                                   [[33m  5.83 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.19 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.88 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.26 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.84 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.15 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.83 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.22 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.81 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.15 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.81 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.16 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.84 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.22 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.87 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.19 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.79 s[39m] [[33m  354 MB[39m]
+  Nonlinear solve did not converge due to DIVERGED_MAX_IT iterations 20
+  Finished Solving                                                                       [[33m356.09 s[39m] [[33m  315 MB[39m]
+[31m Solve Did NOT Converge![39m
+Aborting as solve did not converge
+
+Time Step 63, time = 5.06101e+06, dt = 61009.2
+
+    Computing Pre-SMO Residual
+      Computing Residual                                                                 [[33m  5.84 s[39m] [[33m  315 MB[39m]
+ * Nonlinear |R| = [32m1.282126e-05[39m (Before preset BCs, predictors, correctors, and constraints)
+  Applying predictor with scale factor = 1
+    Finished Computing Pre-SMO Residual                                                  [[33m  5.86 s[39m] [[33m  315 MB[39m]
+    Computing Residual                                                                   [[33m  5.84 s[39m] [[33m  315 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.22 s[39m] [[33m  315 MB[39m]
+    Computing Residual                                                                   [[33m  5.80 s[39m] [[33m  353 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.17 s[39m] [[33m  353 MB[39m]
+    Computing Residual                                                                   [[33m  5.84 s[39m] [[33m  353 MB[39m]
+  Finished Solving                                                                       [[33m 44.48 s[39m] [[33m  353 MB[39m]
+[32m Solve Converged![39m
+Still Executing
+  Finished Computing User Objects                                                        [[33m  6.72 s[39m] [[33m  353 MB[39m]
+
+Time Step 64, time = 5.18303e+06, dt = 122018
+
+    Computing Pre-SMO Residual
+      Computing Residual                                                                 [[33m  5.85 s[39m] [[33m  353 MB[39m]
+ * Nonlinear |R| = [32m2.557905e-05[39m (Before preset BCs, predictors, correctors, and constraints)
+    Finished Computing Pre-SMO Residual                                                  [[33m  5.87 s[39m] [[33m  353 MB[39m]
+  Applying predictor with scale factor = 1
+    Computing Residual                                                                   [[33m  5.86 s[39m] [[33m  353 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.20 s[39m] [[33m  353 MB[39m]
+    Computing Residual                                                                   [[33m  5.30 s[39m] [[33m  354 MB[39m]
+  Finished Solving                                                                       [[33m 26.94 s[39m] [[33m  354 MB[39m]
+[32m Solve Converged![39m
+Still Executing
+  Finished Computing User Objects                                                        [[33m  6.67 s[39m] [[33m  354 MB[39m]
+
+Time Step 65, time = 5.42706e+06, dt = 244037
+
+    Computing Pre-SMO Residual
+      Computing Residual                                                                 [[33m  5.82 s[39m] [[33m  354 MB[39m]
+ * Nonlinear |R| = [32m5.124356e-05[39m (Before preset BCs, predictors, correctors, and constraints)
+    Finished Computing Pre-SMO Residual                                                  [[33m  5.83 s[39m] [[33m  354 MB[39m]
+  Applying predictor with scale factor = 1
+    Computing Residual                                                                   [[33m  5.40 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.20 s[39m] [[33m  354 MB[39m]
+    Finished Computing Residual                                                          [[33m  5.02 s[39m] [[33m  354 MB[39m]
+[32m Solve Converged![39m
+  Finished Solving                                                                       [[33m 29.91 s[39m] [[33m  315 MB[39m]
+Still Executing
+  Finished Computing User Objects                                                        [[33m  6.67 s[39m] [[33m  315 MB[39m]
+
+Time Step 66, time = 5.91514e+06, dt = 488074
+
+    Computing Pre-SMO Residual
+      Computing Residual                                                                 [[33m  5.84 s[39m] [[33m  315 MB[39m]
+ * Nonlinear |R| = [32m1.028033e-04[39m (Before preset BCs, predictors, correctors, and constraints)
+  Applying predictor with scale factor = 1
+    Finished Computing Pre-SMO Residual                                                  [[33m  5.85 s[39m] [[33m  315 MB[39m]
+    Computing Residual                                                                   [[33m  5.88 s[39m] [[33m  315 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.21 s[39m] [[33m  315 MB[39m]
+    Computing Residual                                                                   [[33m  5.84 s[39m] [[33m  353 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.19 s[39m] [[33m  353 MB[39m]
+
+    Computing Residual                                                                   [[33m  5.81 s[39m] [[33m  353 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.15 s[39m] [[33m  353 MB[39m]
+    Computing Residual                                                                   [[33m  5.84 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.16 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.17 s[39m] [[33m  354 MB[39m]
+
+    Computing Residual                                                                   [[33m  5.82 s[39m] [[33m  354 MB[39m]
+  Finished Solving                                                                       [[33m 96.15 s[39m] [[33m  315 MB[39m]
+[32m Solve Converged![39m
+Still Executing
+  Finished Computing User Objects                                                        [[33m  6.77 s[39m] [[33m  315 MB[39m]
+
+Time Step 67, time = 6.63689e+06, dt = 721756
+
+    Computing Pre-SMO Residual
+      Computing Residual                                                                 [[33m  5.87 s[39m] [[33m  315 MB[39m]
+ * Nonlinear |R| = [32m1.532208e-04[39m (Before preset BCs, predictors, correctors, and constraints)
+  Applying predictor with scale factor = 1
+    Finished Computing Pre-SMO Residual                                                  [[33m  5.89 s[39m] [[33m  315 MB[39m]
+    Computing Residual                                                                   [[33m  5.84 s[39m] [[33m  315 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.19 s[39m] [[33m  315 MB[39m]
+
+    Computing Residual                                                                   [[33m  5.82 s[39m] [[33m  353 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.17 s[39m] [[33m  353 MB[39m]
+
+    Computing Residual                                                                   [[33m  5.82 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.20 s[39m] [[33m  354 MB[39m]
+
+    Computing Residual                                                                   [[33m  5.81 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.18 s[39m] [[33m  354 MB[39m]
+
+    Computing Residual                                                                   [[33m  5.82 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.14 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.81 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.19 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.47 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.18 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.81 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.21 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.84 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.83 s[39m] [[33m  354 MB[39m]
+[32m Solve Converged![39m
+  Finished Solving                                                                       [[33m158.61 s[39m] [[33m  354 MB[39m]
+Still Executing
+  Finished Computing User Objects                                                        [[33m  6.68 s[39m] [[33m  354 MB[39m]
+
+Time Step 68, time = 7.44672e+06, dt = 809824
+
+    Computing Pre-SMO Residual
+      Computing Residual                                                                 [[33m  5.92 s[39m] [[33m  354 MB[39m]
+ * Nonlinear |R| = [32m1.737871e-04[39m (Before preset BCs, predictors, correctors, and constraints)
+    Finished Computing Pre-SMO Residual                                                  [[33m  5.95 s[39m] [[33m  354 MB[39m]
+  Applying predictor with scale factor = 1
+    Computing Residual                                                                   [[33m  5.97 s[39m] [[33m  315 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.27 s[39m] [[33m  315 MB[39m]
+    Computing Residual                                                                   [[33m  5.81 s[39m] [[33m  353 MB[39m]
+    Computing Jacobian                                                                   [[33m  5.47 s[39m] [[33m  353 MB[39m]
+  Finished Solving                                                                       [[33m127.26 s[39m] [[33m  315 MB[39m]
+[32m Solve Converged![39m
+  Finished Computing User Objects                                                        [[33m  5.22 s[39m] [[33m  315 MB[39m]
+
+Time Step 69, time = 8.35536e+06, dt = 908637
+ * Nonlinear |R| = [32m1.974752e-04[39m (Before preset BCs, predictors, correctors, and constraints)
+  Applying predictor with scale factor = 1
+  Finished Solving                                                                       [[33m 95.73 s[39m] [[33m  315 MB[39m]
+[32m Solve Converged![39m
+  Finished Computing User Objects                                                        [[33m  5.30 s[39m] [[33m  315 MB[39m]
+
+Time Step 70, time = 9.37486e+06, dt = 1.01951e+06
+ * Nonlinear |R| = [32m2.246581e-04[39m (Before preset BCs, predictors, correctors, and constraints)
+  Applying predictor with scale factor = 1
+ 0 Nonlinear |R| = [32m1.148495e-05[39m
+      0 Linear |R| = [32m1.148495e-05[39m
+      1 Linear |R| = [32m3.968099e-20[39m
+ 1 Nonlinear |R| = [32m1.008118e-05[39m
+      0 Linear |R| = [32m1.008118e-05[39m
+      1 Linear |R| = [32m3.101019e-20[39m
+ 2 Nonlinear |R| = [32m9.449815e-06[39m
+      0 Linear |R| = [32m9.449815e-06[39m
+      1 Linear |R| = [32m4.509583e-20[39m
+ 3 Nonlinear |R| = [32m1.015984e-06[39m
+      0 Linear |R| = [32m1.015984e-06[39m
+      1 Linear |R| = [32m1.321372e-20[39m
+ 4 Nonlinear |R| = [32m2.242168e-07[39m
+      0 Linear |R| = [32m2.242168e-07[39m
+      1 Linear |R| = [32m1.107468e-21[39m
+ 5 Nonlinear |R| = [32m1.992994e-07[39m
+      0 Linear |R| = [32m1.992994e-07[39m
+      1 Linear |R| = [32m1.240287e-21[39m
+ 6 Nonlinear |R| = [32m2.938199e-08[39m
+  Finished Solving                                                                       [[33m 96.82 s[39m] [[33m  316 MB[39m]
+[32m Solve Converged![39m
+  Finished Computing User Objects                                                        [[33m  5.24 s[39m] [[33m  316 MB[39m]
+
+Postprocessor Values:
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+| time           | Ep_eff         | Nloop_1        | Nloop_10       | Nloop_11       | Nloop_12       | Nloop_13       |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+|   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |
+|   3.971641e+02 |   2.672256e-08 |   3.578125e+12 |   3.578125e+12 |   3.578125e+12 |   3.578125e+12 |   3.578125e+12 |
+|   3.971641e+03 |   3.392843e-07 |   3.578126e+12 |   3.578126e+12 |   3.578126e+12 |   3.578126e+12 |   3.578126e+12 |
+|   3.971641e+04 |   3.462121e-06 |   3.578131e+12 |   3.578131e+12 |   3.578131e+12 |   3.578131e+12 |   3.578131e+12 |
+|   3.971641e+05 |   3.442116e-05 |   3.578149e+12 |   3.578149e+12 |   3.578149e+12 |   3.578149e+12 |   3.578149e+12 |
+|   1.255943e+06 |   1.068451e-04 |   3.578168e+12 |   3.578168e+12 |   3.578168e+12 |   3.578168e+12 |   3.578168e+12 |
+|   3.971641e+06 |   3.226034e-04 |   3.578202e+12 |   3.578202e+12 |   3.578202e+12 |   3.578202e+12 |   3.578202e+12 |
+|   9.374863e+06 |   7.153770e-04 |   3.578240e+12 |   3.578240e+12 |   3.578240e+12 |   3.578240e+12 |   3.578240e+12 |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+| time           | Nloop_14       | Nloop_15       | Nloop_16       | Nloop_17       | Nloop_18       | Nloop_19       |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+|   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |
+|   3.971641e+02 |   3.578125e+12 |   3.578125e+12 |   3.578125e+12 |   3.578125e+12 |   3.578125e+12 |   3.578125e+12 |
+|   3.971641e+03 |   3.578126e+12 |   3.578126e+12 |   3.578126e+12 |   3.578126e+12 |   3.578126e+12 |   3.578126e+12 |
+|   3.971641e+04 |   3.578131e+12 |   3.578131e+12 |   3.578131e+12 |   3.578131e+12 |   3.578131e+12 |   3.578132e+12 |
+|   3.971641e+05 |   3.578149e+12 |   3.578149e+12 |   3.578149e+12 |   3.578149e+12 |   3.578149e+12 |   3.578151e+12 |
+|   1.255943e+06 |   3.578168e+12 |   3.578168e+12 |   3.578168e+12 |   3.578168e+12 |   3.578168e+12 |   3.578173e+12 |
+|   3.971641e+06 |   3.578202e+12 |   3.578202e+12 |   3.578200e+12 |   3.578200e+12 |   3.578200e+12 |   3.578210e+12 |
+|   9.374863e+06 |   3.578240e+12 |   3.578240e+12 |   3.578238e+12 |   3.578238e+12 |   3.578238e+12 |   3.578252e+12 |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+| time           | Nloop_2        | Nloop_20       | Nloop_21       | Nloop_22       | Nloop_23       | Nloop_24       |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+|   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |
+|   3.971641e+02 |   3.578125e+12 |   3.578125e+12 |   3.578125e+12 |   3.578125e+12 |   3.578125e+12 |   3.578125e+12 |
+|   3.971641e+03 |   3.578126e+12 |   3.578126e+12 |   3.578126e+12 |   3.578126e+12 |   3.578126e+12 |   3.578126e+12 |
+|   3.971641e+04 |   3.578131e+12 |   3.578132e+12 |   3.578132e+12 |   3.578131e+12 |   3.578131e+12 |   3.578131e+12 |
+|   3.971641e+05 |   3.578149e+12 |   3.578151e+12 |   3.578151e+12 |   3.578149e+12 |   3.578149e+12 |   3.578149e+12 |
+|   1.255943e+06 |   3.578168e+12 |   3.578173e+12 |   3.578173e+12 |   3.578168e+12 |   3.578168e+12 |   3.578168e+12 |
+|   3.971641e+06 |   3.578202e+12 |   3.578210e+12 |   3.578210e+12 |   3.578202e+12 |   3.578202e+12 |   3.578202e+12 |
+|   9.374863e+06 |   3.578240e+12 |   3.578252e+12 |   3.578252e+12 |   3.578240e+12 |   3.578240e+12 |   3.578240e+12 |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+| time           | Nloop_3        | Nloop_4        | Nloop_5        | Nloop_6        | Nloop_7        | Nloop_8        |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+|   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |
+|   3.971641e+02 |   3.578125e+12 |   3.578125e+12 |   3.578125e+12 |   3.578125e+12 |   3.578125e+12 |   3.578125e+12 |
+|   3.971641e+03 |   3.578126e+12 |   3.578126e+12 |   3.578126e+12 |   3.578126e+12 |   3.578126e+12 |   3.578126e+12 |
+|   3.971641e+04 |   3.578131e+12 |   3.578131e+12 |   3.578131e+12 |   3.578131e+12 |   3.578132e+12 |   3.578132e+12 |
+|   3.971641e+05 |   3.578149e+12 |   3.578149e+12 |   3.578149e+12 |   3.578149e+12 |   3.578151e+12 |   3.578151e+12 |
+|   1.255943e+06 |   3.578168e+12 |   3.578168e+12 |   3.578168e+12 |   3.578168e+12 |   3.578173e+12 |   3.578173e+12 |
+|   3.971641e+06 |   3.578202e+12 |   3.578200e+12 |   3.578200e+12 |   3.578200e+12 |   3.578210e+12 |   3.578210e+12 |
+|   9.374863e+06 |   3.578240e+12 |   3.578238e+12 |   3.578238e+12 |   3.578238e+12 |   3.578252e+12 |   3.578252e+12 |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+| time           | Nloop_9        | cslipr_1       | cslipr_10      | cslipr_11      | cslipr_12      | cslipr_13      |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+|   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |
+|   3.971641e+02 |   3.578125e+12 |   5.052237e-12 |   5.055272e-12 |   5.055272e-12 |   5.055272e-12 |   5.052237e-12 |
+|   3.971641e+03 |   3.578126e+12 |   5.051664e-12 |   5.054768e-12 |   5.054768e-12 |   5.054768e-12 |   5.051664e-12 |
+|   3.971641e+04 |   3.578132e+12 |   5.045983e-12 |   5.049747e-12 |   5.049747e-12 |   5.049747e-12 |   5.045983e-12 |
+|   3.971641e+05 |   3.578151e+12 |   4.992907e-12 |   5.002224e-12 |   5.002224e-12 |   5.002224e-12 |   4.992907e-12 |
+|   1.255943e+06 |   3.578173e+12 |   4.875149e-12 |   4.889299e-12 |   4.889299e-12 |   4.889299e-12 |   4.875149e-12 |
+|   3.971641e+06 |   3.578210e+12 |   4.665807e-12 |   4.663037e-12 |   4.663037e-12 |   4.663037e-12 |   4.665807e-12 |
+|   9.374863e+06 |   3.578252e+12 |   4.451316e-12 |   4.455651e-12 |   4.455651e-12 |   4.455651e-12 |   4.451316e-12 |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+| time           | cslipr_14      | cslipr_15      | cslipr_16      | cslipr_17      | cslipr_18      | cslipr_19      |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+|   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |
+|   3.971641e+02 |   5.052237e-12 |   5.052237e-12 |   4.971245e-12 |   4.971245e-12 |   4.971245e-12 |   5.582465e-12 |
+|   3.971641e+03 |   5.051664e-12 |   5.051664e-12 |   4.970631e-12 |   4.970631e-12 |   4.970631e-12 |   5.581921e-12 |
+|   3.971641e+04 |   5.045983e-12 |   5.045983e-12 |   4.964525e-12 |   4.964525e-12 |   4.964525e-12 |   5.576512e-12 |
+|   3.971641e+05 |   4.992907e-12 |   4.992907e-12 |   4.907000e-12 |   4.907000e-12 |   4.907000e-12 |   5.525455e-12 |
+|   1.255943e+06 |   4.875149e-12 |   4.875149e-12 |   4.772248e-12 |   4.772248e-12 |   4.772248e-12 |   5.406611e-12 |
+|   3.971641e+06 |   4.665807e-12 |   4.665807e-12 |   4.528088e-12 |   4.528088e-12 |   4.528088e-12 |   5.176842e-12 |
+|   9.374863e+06 |   4.451316e-12 |   4.451316e-12 |   4.349679e-12 |   4.349679e-12 |   4.349679e-12 |   4.900006e-12 |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+| time           | cslipr_2       | cslipr_20      | cslipr_21      | cslipr_22      | cslipr_23      | cslipr_24      |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+|   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |
+|   3.971641e+02 |   5.052237e-12 |   5.582465e-12 |   5.582465e-12 |   5.055272e-12 |   5.055272e-12 |   5.055272e-12 |
+|   3.971641e+03 |   5.051664e-12 |   5.581921e-12 |   5.581921e-12 |   5.054768e-12 |   5.054768e-12 |   5.054768e-12 |
+|   3.971641e+04 |   5.045983e-12 |   5.576512e-12 |   5.576512e-12 |   5.049747e-12 |   5.049747e-12 |   5.049747e-12 |
+|   3.971641e+05 |   4.992907e-12 |   5.525455e-12 |   5.525455e-12 |   5.002224e-12 |   5.002224e-12 |   5.002224e-12 |
+|   1.255943e+06 |   4.875149e-12 |   5.406611e-12 |   5.406611e-12 |   4.889299e-12 |   4.889299e-12 |   4.889299e-12 |
+|   3.971641e+06 |   4.665807e-12 |   5.176842e-12 |   5.176842e-12 |   4.663037e-12 |   4.663037e-12 |   4.663037e-12 |
+|   9.374863e+06 |   4.451316e-12 |   4.900006e-12 |   4.900006e-12 |   4.455651e-12 |   4.455651e-12 |   4.455651e-12 |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+| time           | cslipr_3       | cslipr_4       | cslipr_5       | cslipr_6       | cslipr_7       | cslipr_8       |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+|   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |
+|   3.971641e+02 |   5.052237e-12 |   4.971245e-12 |   4.971245e-12 |   4.971245e-12 |   5.582465e-12 |   5.582465e-12 |
+|   3.971641e+03 |   5.051664e-12 |   4.970631e-12 |   4.970631e-12 |   4.970631e-12 |   5.581921e-12 |   5.581921e-12 |
+|   3.971641e+04 |   5.045983e-12 |   4.964525e-12 |   4.964525e-12 |   4.964525e-12 |   5.576512e-12 |   5.576512e-12 |
+|   3.971641e+05 |   4.992907e-12 |   4.907000e-12 |   4.907000e-12 |   4.907000e-12 |   5.525455e-12 |   5.525455e-12 |
+|   1.255943e+06 |   4.875149e-12 |   4.772248e-12 |   4.772248e-12 |   4.772248e-12 |   5.406611e-12 |   5.406611e-12 |
+|   3.971641e+06 |   4.665807e-12 |   4.528088e-12 |   4.528088e-12 |   4.528088e-12 |   5.176842e-12 |   5.176842e-12 |
+|   9.374863e+06 |   4.451316e-12 |   4.349679e-12 |   4.349679e-12 |   4.349679e-12 |   4.900006e-12 |   4.900006e-12 |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+| time           | cslipr_9       | cstrainfrac1   | cstrainfrac2   | dloop_1        | dloop_10       | dloop_11       |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+|   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |
+|   3.971641e+02 |   5.582465e-12 |   1.000000e+00 |   1.000000e+00 |   6.729409e-06 |   6.729442e-06 |   6.729442e-06 |
+|   3.971641e+03 |   5.581921e-12 |   1.000000e+00 |   1.000000e+00 |   9.496633e-06 |   9.496917e-06 |   9.496917e-06 |
+|   3.971641e+04 |   5.576512e-12 |   1.000000e+00 |   1.000000e+00 |   2.349167e-05 |   2.349286e-05 |   2.349286e-05 |
+|   3.971641e+05 |   5.525455e-12 |   1.000000e+00 |   1.000000e+00 |   7.215174e-05 |   7.215570e-05 |   7.215570e-05 |
+|   1.255943e+06 |   5.406611e-12 |   1.000000e+00 |   1.000000e+00 |   1.267242e-04 |   1.267313e-04 |   1.267313e-04 |
+|   3.971641e+06 |   5.176842e-12 |   1.000000e+00 |   1.000000e+00 |   2.244423e-04 |   2.244552e-04 |   2.244552e-04 |
+|   9.374863e+06 |   4.900006e-12 |   1.000000e+00 |   1.000000e+00 |   3.441279e-04 |   3.441491e-04 |   3.441491e-04 |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+| time           | dloop_12       | dloop_13       | dloop_14       | dloop_15       | dloop_16       | dloop_17       |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+|   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |
+|   3.971641e+02 |   6.729442e-06 |   6.729409e-06 |   6.729409e-06 |   6.729409e-06 |   6.729411e-06 |   6.729411e-06 |
+|   3.971641e+03 |   9.496917e-06 |   9.496633e-06 |   9.496633e-06 |   9.496633e-06 |   9.496657e-06 |   9.496657e-06 |
+|   3.971641e+04 |   2.349286e-05 |   2.349167e-05 |   2.349167e-05 |   2.349167e-05 |   2.349177e-05 |   2.349177e-05 |
+|   3.971641e+05 |   7.215570e-05 |   7.215174e-05 |   7.215174e-05 |   7.215174e-05 |   7.215222e-05 |   7.215222e-05 |
+|   1.255943e+06 |   1.267313e-04 |   1.267242e-04 |   1.267242e-04 |   1.267242e-04 |   1.267258e-04 |   1.267258e-04 |
+|   3.971641e+06 |   2.244552e-04 |   2.244423e-04 |   2.244423e-04 |   2.244423e-04 |   2.244506e-04 |   2.244506e-04 |
+|   9.374863e+06 |   3.441491e-04 |   3.441279e-04 |   3.441279e-04 |   3.441279e-04 |   3.441620e-04 |   3.441620e-04 |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+| time           | dloop_18       | dloop_19       | dloop_2        | dloop_20       | dloop_21       | dloop_22       |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+|   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |
+|   3.971641e+02 |   6.729411e-06 |   6.729447e-06 |   6.729409e-06 |   6.729447e-06 |   6.729447e-06 |   6.729442e-06 |
+|   3.971641e+03 |   9.496657e-06 |   9.496956e-06 |   9.496633e-06 |   9.496956e-06 |   9.496956e-06 |   9.496917e-06 |
+|   3.971641e+04 |   2.349177e-05 |   2.349298e-05 |   2.349167e-05 |   2.349298e-05 |   2.349298e-05 |   2.349286e-05 |
+|   3.971641e+05 |   7.215222e-05 |   7.215499e-05 |   7.215174e-05 |   7.215499e-05 |   7.215499e-05 |   7.215570e-05 |
+|   1.255943e+06 |   1.267258e-04 |   1.267252e-04 |   1.267242e-04 |   1.267252e-04 |   1.267252e-04 |   1.267313e-04 |
+|   3.971641e+06 |   2.244506e-04 |   2.244176e-04 |   2.244423e-04 |   2.244176e-04 |   2.244176e-04 |   2.244552e-04 |
+|   9.374863e+06 |   3.441620e-04 |   3.440119e-04 |   3.441279e-04 |   3.440119e-04 |   3.440119e-04 |   3.441491e-04 |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+| time           | dloop_23       | dloop_24       | dloop_3        | dloop_4        | dloop_5        | dloop_6        |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+|   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |
+|   3.971641e+02 |   6.729442e-06 |   6.729442e-06 |   6.729409e-06 |   6.729411e-06 |   6.729411e-06 |   6.729411e-06 |
+|   3.971641e+03 |   9.496917e-06 |   9.496917e-06 |   9.496633e-06 |   9.496657e-06 |   9.496657e-06 |   9.496657e-06 |
+|   3.971641e+04 |   2.349286e-05 |   2.349286e-05 |   2.349167e-05 |   2.349177e-05 |   2.349177e-05 |   2.349177e-05 |
+|   3.971641e+05 |   7.215570e-05 |   7.215570e-05 |   7.215174e-05 |   7.215222e-05 |   7.215222e-05 |   7.215222e-05 |
+|   1.255943e+06 |   1.267313e-04 |   1.267313e-04 |   1.267242e-04 |   1.267258e-04 |   1.267258e-04 |   1.267258e-04 |
+|   3.971641e+06 |   2.244552e-04 |   2.244552e-04 |   2.244423e-04 |   2.244506e-04 |   2.244506e-04 |   2.244506e-04 |
+|   9.374863e+06 |   3.441491e-04 |   3.441491e-04 |   3.441279e-04 |   3.441620e-04 |   3.441620e-04 |   3.441620e-04 |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+| time           | dloop_7        | dloop_8        | dloop_9        | eeq            | gslipr_1       | gslipr_10      |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+|   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |
+|   3.971641e+02 |   6.729447e-06 |   6.729447e-06 |   6.729447e-06 |   3.327721e-04 |   1.115036e-36 |  -3.206273e-36 |
+|   3.971641e+03 |   9.496956e-06 |   9.496956e-06 |   9.496956e-06 |   3.330372e-04 |   5.506618e-37 |  -1.608881e-36 |
+|   3.971641e+04 |   2.349298e-05 |   2.349298e-05 |   2.349298e-05 |   3.356904e-04 |   2.584182e-38 |  -8.621680e-38 |
+|   3.971641e+05 |   7.215499e-05 |   7.215499e-05 |   7.215499e-05 |   3.623822e-04 |  -6.995637e-43 |  -2.184934e-40 |
+|   1.255943e+06 |   1.267252e-04 |   1.267252e-04 |   1.267252e-04 |   4.269572e-04 |  -1.727915e-42 |  -4.651090e-42 |
+|   3.971641e+06 |   2.244176e-04 |   2.244176e-04 |   2.244176e-04 |   6.288675e-04 |  -1.483391e-43 |  -3.885441e-43 |
+|   9.374863e+06 |   3.440119e-04 |   3.440119e-04 |   3.440119e-04 |   1.009725e-03 |   1.391823e-43 |   5.636516e-43 |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+| time           | gslipr_11      | gslipr_12      | gslipr_13      | gslipr_14      | gslipr_15      | gslipr_16      |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+|   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |
+|   3.971641e+02 |   1.130319e-33 |   4.964391e-34 |  -1.753559e-36 |  -2.323383e-36 |   1.908675e-37 |   1.433225e-36 |
+|   3.971641e+03 |   5.335354e-34 |   2.336395e-34 |  -8.661499e-37 |  -1.175891e-36 |   9.538274e-38 |   7.288982e-37 |
+|   3.971641e+04 |   2.166487e-35 |   9.525876e-36 |  -4.236675e-38 |  -6.572712e-38 |   5.791128e-39 |   4.280592e-38 |
+|   3.971641e+05 |   2.434013e-38 |   1.329832e-38 |  -4.780896e-41 |  -1.787140e-40 |   4.311296e-41 |   1.682906e-40 |
+|   1.255943e+06 |   1.273970e-40 |   1.167639e-40 |   8.641013e-43 |  -2.253446e-42 |   1.525864e-42 |   4.291646e-42 |
+|   3.971641e+06 |   2.378739e-42 |   2.190115e-43 |  -2.445678e-43 |   2.524338e-43 |   3.378442e-44 |   2.426493e-43 |
+|   9.374863e+06 |   5.111447e-42 |  -1.115405e-42 |  -1.339326e-42 |   2.212973e-42 |   9.594846e-45 |   6.920445e-43 |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+| time           | gslipr_17      | gslipr_18      | gslipr_19      | gslipr_2       | gslipr_20      | gslipr_21      |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+|   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |
+|   3.971641e+02 |  -1.199551e-36 |   4.638429e-36 |  -5.778508e-36 |  -1.897599e-36 |  -4.621619e-36 |  -4.160790e-36 |
+|   3.971641e+03 |  -5.755316e-37 |   2.279129e-36 |  -2.892827e-36 |  -9.611617e-37 |  -2.288036e-36 |  -2.079580e-36 |
+|   3.971641e+04 |  -1.948110e-38 |   1.136466e-37 |  -1.505611e-37 |  -5.396968e-38 |  -1.135158e-37 |  -1.075384e-37 |
+|   3.971641e+05 |   2.095495e-40 |   2.929204e-40 |  -2.331679e-40 |  -1.473819e-40 |  -1.642636e-40 |  -1.969127e-40 |
+|   1.255943e+06 |   1.850249e-41 |   5.733544e-42 |   4.668495e-42 |  -1.140569e-42 |   1.151763e-42 |  -2.348257e-42 |
+|   3.971641e+06 |   7.639265e-42 |   3.631961e-43 |   2.961097e-42 |   1.112406e-42 |   3.575727e-43 |  -1.707020e-43 |
+|   9.374863e+06 |   2.851137e-41 |   2.254586e-42 |   1.347044e-41 |   8.392599e-42 |   8.530654e-43 |  -1.080854e-42 |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+| time           | gslipr_22      | gslipr_23      | gslipr_24      | gslipr_3       | gslipr_4       | gslipr_5       |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+|   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |
+|   3.971641e+02 |   1.379561e-34 |  -1.492297e-35 |  -2.042802e-36 |  -2.669232e-35 |   3.504247e-36 |   9.745377e-36 |
+|   3.971641e+03 |   6.652871e-35 |  -7.230704e-36 |  -9.976405e-37 |  -1.288186e-35 |   1.756245e-36 |   4.848531e-36 |
+|   3.971641e+04 |   3.022371e-36 |  -3.293981e-37 |  -3.689179e-38 |  -5.961481e-37 |   9.355012e-38 |   2.465150e-37 |
+|   3.971641e+05 |   5.452368e-39 |  -4.264186e-40 |   2.386607e-40 |  -1.391518e-39 |   2.291519e-40 |   3.662840e-40 |
+|   1.255943e+06 |   6.828389e-41 |   3.630259e-42 |   1.239400e-41 |  -2.758587e-41 |   3.995661e-42 |  -7.511100e-42 |
+|   3.971641e+06 |   4.594299e-42 |   1.275468e-42 |   7.823089e-43 |  -1.054690e-42 |   3.217727e-43 |  -4.972793e-42 |
+|   9.374863e+06 |   8.345573e-42 |   2.129042e-42 |   8.985009e-43 |  -5.723494e-43 |   4.665301e-43 |  -1.379441e-41 |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+| time           | gslipr_6       | gslipr_7       | gslipr_8       | gslipr_9       | rho_i          | rho_m          |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+|   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |
+|   3.971641e+02 |  -5.123483e-36 |  -7.044251e-36 |   8.004175e-36 |  -7.221483e-36 |   1.599999e+07 |   3.999998e+06 |
+|   3.971641e+03 |  -2.520197e-36 |  -3.445864e-36 |   3.956504e-36 |  -3.568496e-36 |   1.599992e+07 |   3.999972e+06 |
+|   3.971641e+04 |  -1.267941e-37 |  -1.660311e-37 |   2.024364e-37 |  -1.776494e-37 |   1.599916e+07 |   3.999714e+06 |
+|   3.971641e+05 |  -3.251423e-40 |  -3.359566e-40 |   5.583020e-40 |  -3.835341e-40 |   1.599161e+07 |   3.997150e+06 |
+|   1.255943e+06 |  -4.524409e-42 |  -4.373834e-42 |   1.312416e-41 |  -1.155542e-41 |   1.597376e+07 |   3.991122e+06 |
+|   3.971641e+06 |  -4.466159e-43 |  -2.666596e-43 |   1.468305e-42 |  -1.986594e-42 |   1.591910e+07 |   3.972912e+06 |
+|   9.374863e+06 |  -1.569169e-42 |  -7.031063e-43 |   1.816709e-42 |  -2.797037e-42 |   1.581508e+07 |   3.938929e+06 |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+| time           | strain_xx      | strain_yy      | strain_zz      | stress_xx      | stress_yy      | stress_zz      | vonmises       |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+|   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |
+|   3.971641e+02 |  -1.584851e-04 |   3.489165e-04 |   9.872945e-05 |  -2.822109e-04 |   9.237762e+01 |   4.618971e+01 |   8.248902e+01 |
+|   3.971641e+03 |  -1.584749e-04 |   3.492880e-04 |   9.879065e-05 |  -2.817158e-04 |   9.237762e+01 |   4.618971e+01 |   8.248483e+01 |
+|   3.971641e+04 |  -1.583719e-04 |   3.530005e-04 |   9.940223e-05 |  -2.770504e-04 |   9.237763e+01 |   4.618971e+01 |   8.244348e+01 |
+|   3.971641e+05 |  -1.572685e-04 |   3.898136e-04 |   1.054726e-04 |  -5.870973e-04 |   9.237722e+01 |   4.618929e+01 |   8.208170e+01 |
+|   1.255943e+06 |  -1.540383e-04 |   4.759453e-04 |   1.198323e-04 |  -1.373469e-03 |   9.237601e+01 |   4.618825e+01 |   8.152693e+01 |
+|   3.971641e+06 |  -1.394677e-04 |   7.313754e-04 |   1.656305e-04 |  -8.921250e-03 |   9.236928e+01 |   4.618008e+01 |   8.134361e+01 |
+|   9.374863e+06 |  -9.809609e-05 |   1.186999e-03 |   2.673893e-04 |   7.407843e-04 |   9.237668e+01 |   4.618818e+01 |   8.335602e+01 |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+
+
+Time Step 71, time = 1.05188e+07, dt = 1.14391e+06
+ * Nonlinear |R| = [32m2.559686e-04[39m (Before preset BCs, predictors, correctors, and constraints)
+  Applying predictor with scale factor = 1
+  Finished Solving                                                                       [[33m 84.68 s[39m] [[33m  354 MB[39m]
+[32m Solve Converged![39m
+  Finished Computing User Objects                                                        [[33m  5.05 s[39m] [[33m  354 MB[39m]
+
+Time Step 72, time = 1.18023e+07, dt = 1.28348e+06
+ * Nonlinear |R| = [32m2.922255e-04[39m (Before preset BCs, predictors, correctors, and constraints)
+  Applying predictor with scale factor = 1
+  Finished Solving                                                                       [[33m 84.07 s[39m] [[33m  354 MB[39m]
+[32m Solve Converged![39m
+  Finished Computing User Objects                                                        [[33m  5.26 s[39m] [[33m  354 MB[39m]
+
+Time Step 73, time = 1.32423e+07, dt = 1.44009e+06
+ * Nonlinear |R| = [32m3.342919e-04[39m (Before preset BCs, predictors, correctors, and constraints)
+  Applying predictor with scale factor = 1
+  Finished Solving                                                                       [[33m 86.93 s[39m] [[33m  354 MB[39m]
+[32m Solve Converged![39m
+  Finished Computing User Objects                                                        [[33m  5.18 s[39m] [[33m  354 MB[39m]
+
+Time Step 74, time = 1.48582e+07, dt = 1.61581e+06
+ * Nonlinear |R| = [32m3.833664e-04[39m (Before preset BCs, predictors, correctors, and constraints)
+  Applying predictor with scale factor = 1
+  Finished Solving                                                                       [[33m104.45 s[39m] [[33m  354 MB[39m]
+[32m Solve Converged![39m
+  Finished Computing User Objects                                                        [[33m  5.16 s[39m] [[33m  315 MB[39m]
+
+Time Step 75, time = 1.66711e+07, dt = 1.81297e+06
+ * Nonlinear |R| = [32m4.409869e-04[39m (Before preset BCs, predictors, correctors, and constraints)
+  Applying predictor with scale factor = 1
+  Finished Solving                                                                       [[33m106.13 s[39m] [[33m  316 MB[39m]
+[32m Solve Converged![39m
+Still Executing
+  Finished Computing User Objects                                                        [[33m  7.64 s[39m] [[33m  316 MB[39m]
+
+Time Step 76, time = 1.87053e+07, dt = 2.03418e+06
+
+    Computing Pre-SMO Residual
+      Computing Residual                                                                 [[33m  5.97 s[39m] [[33m  316 MB[39m]
+ * Nonlinear |R| = [32m5.089434e-04[39m (Before preset BCs, predictors, correctors, and constraints)
+    Finished Computing Pre-SMO Residual                                                  [[33m  5.99 s[39m] [[33m  316 MB[39m]
+  Applying predictor with scale factor = 1
+    Computing Residual                                                                   [[33m  5.94 s[39m] [[33m  316 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.29 s[39m] [[33m  316 MB[39m]
+    Computing Residual                                                                   [[33m  5.89 s[39m] [[33m  353 MB[39m]
+    Computing Residual                                                                   [[33m  5.91 s[39m] [[33m  353 MB[39m]
+    Computing Jacobian                                                                   [[33m  5.56 s[39m] [[33m  353 MB[39m]
+
+    Computing Residual                                                                   [[33m  5.83 s[39m] [[33m  354 MB[39m]
+    Finished Computing Residual                                                          [[33m  5.07 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.18 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.80 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.88 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.25 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.86 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.18 s[39m] [[33m  354 MB[39m]
+
+    Computing Residual                                                                   [[33m  5.81 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.85 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.16 s[39m] [[33m  354 MB[39m]
+
+    Computing Residual                                                                   [[33m  5.82 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.86 s[39m] [[33m  354 MB[39m]
+  Finished Solving                                                                       [[33m144.93 s[39m] [[33m  315 MB[39m]
+[32m Solve Converged![39m
+Still Executing
+  Finished Computing User Objects                                                        [[33m  6.76 s[39m] [[33m  315 MB[39m]
+
+Time Step 77, time = 2.09877e+07, dt = 2.28239e+06
+
+    Computing Pre-SMO Residual
+      Computing Residual                                                                 [[33m  5.89 s[39m] [[33m  316 MB[39m]
+ * Nonlinear |R| = [32m5.896058e-04[39m (Before preset BCs, predictors, correctors, and constraints)
+    Finished Computing Pre-SMO Residual                                                  [[33m  5.91 s[39m] [[33m  316 MB[39m]
+  Applying predictor with scale factor = 1
+    Computing Residual                                                                   [[33m  5.86 s[39m] [[33m  316 MB[39m]
+    Computing Jacobian                                                                   [[33m  5.26 s[39m] [[33m  316 MB[39m]
+
+    Computing Residual                                                                   [[33m  5.81 s[39m] [[33m  353 MB[39m]
+    Computing Residual                                                                   [[33m  5.82 s[39m] [[33m  353 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.17 s[39m] [[33m  353 MB[39m]
+
+    Computing Residual                                                                   [[33m  5.87 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.84 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  5.78 s[39m] [[33m  354 MB[39m]
+
+    Computing Residual                                                                   [[33m  5.83 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.83 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.18 s[39m] [[33m  354 MB[39m]
+
+    Computing Residual                                                                   [[33m  5.83 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.20 s[39m] [[33m  354 MB[39m]
+
+    Computing Residual                                                                   [[33m  5.83 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.82 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.17 s[39m] [[33m  354 MB[39m]
+
+    Computing Residual                                                                   [[33m  5.88 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.89 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.27 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.92 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.90 s[39m] [[33m  354 MB[39m]
+[32m Solve Converged![39m
+  Finished Solving                                                                       [[33m172.05 s[39m] [[33m  315 MB[39m]
+Still Executing
+  Finished Computing User Objects                                                        [[33m  6.01 s[39m] [[33m  315 MB[39m]
+
+Time Step 78, time = 2.35486e+07, dt = 2.56089e+06
+
+    Computing Pre-SMO Residual
+      Computing Residual                                                                 [[33m  5.50 s[39m] [[33m  315 MB[39m]
+ * Nonlinear |R| = [32m6.859625e-04[39m (Before preset BCs, predictors, correctors, and constraints)
+    Finished Computing Pre-SMO Residual                                                  [[33m  5.51 s[39m] [[33m  315 MB[39m]
+  Applying predictor with scale factor = 1
+    Computing Residual                                                                   [[33m  5.87 s[39m] [[33m  316 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.23 s[39m] [[33m  316 MB[39m]
+    Computing Residual                                                                   [[33m  5.79 s[39m] [[33m  353 MB[39m]
+    Computing Residual                                                                   [[33m  5.84 s[39m] [[33m  353 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.20 s[39m] [[33m  353 MB[39m]
+
+    Computing Residual                                                                   [[33m  5.80 s[39m] [[33m  353 MB[39m]
+    Computing Residual                                                                   [[33m  5.81 s[39m] [[33m  353 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.18 s[39m] [[33m  353 MB[39m]
+    Computing Residual                                                                   [[33m  5.82 s[39m] [[33m  353 MB[39m]
+    Computing Residual                                                                   [[33m  5.84 s[39m] [[33m  353 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.20 s[39m] [[33m  353 MB[39m]
+    Computing Residual                                                                   [[33m  5.82 s[39m] [[33m  353 MB[39m]
+    Computing Residual                                                                   [[33m  5.84 s[39m] [[33m  353 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.16 s[39m] [[33m  353 MB[39m]
+    Computing Residual                                                                   [[33m  5.31 s[39m] [[33m  353 MB[39m]
+    Computing Jacobian                                                                   [[33m  5.78 s[39m] [[33m  353 MB[39m]
+
+    Computing Residual                                                                   [[33m  5.85 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.87 s[39m] [[33m  354 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.16 s[39m] [[33m  354 MB[39m]
+
+    Computing Residual                                                                   [[33m  5.81 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.82 s[39m] [[33m  354 MB[39m]
+  Finished Solving                                                                       [[33m172.27 s[39m] [[33m  354 MB[39m]
+[32m Solve Converged![39m
+Still Executing
+  Finished Computing User Objects                                                        [[33m  6.70 s[39m] [[33m  354 MB[39m]
+
+Time Step 79, time = 2.6422e+07, dt = 2.87336e+06
+
+    Computing Pre-SMO Residual
+      Computing Residual                                                                 [[33m  5.92 s[39m] [[33m  315 MB[39m]
+ * Nonlinear |R| = [32m8.015979e-04[39m (Before preset BCs, predictors, correctors, and constraints)
+    Finished Computing Pre-SMO Residual                                                  [[33m  5.94 s[39m] [[33m  315 MB[39m]
+  Applying predictor with scale factor = 1
+    Computing Residual                                                                   [[33m  5.85 s[39m] [[33m  315 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.25 s[39m] [[33m  315 MB[39m]
+    Computing Residual                                                                   [[33m  5.91 s[39m] [[33m  353 MB[39m]
+    Computing Jacobian                                                                   [[33m  6.19 s[39m] [[33m  353 MB[39m]
+
+    Computing Residual                                                                   [[33m  5.86 s[39m] [[33m  353 MB[39m]
+    Computing Residual                                                                   [[33m  5.83 s[39m] [[33m  353 MB[39m]
+    Computing Jacobian                                                                   [[33m  5.77 s[39m] [[33m  353 MB[39m]
+  Finished Solving                                                                       [[33m163.68 s[39m] [[33m  315 MB[39m]
+[32m Solve Converged![39m
+  Finished Computing User Objects                                                        [[33m  5.21 s[39m] [[33m  315 MB[39m]
+
+Time Step 80, time = 2.96459e+07, dt = 3.22397e+06
+ * Nonlinear |R| = [32m9.407152e-04[39m (Before preset BCs, predictors, correctors, and constraints)
+  Applying predictor with scale factor = 1
+ 0 Nonlinear |R| = [32m8.187679e-05[39m
+      0 Linear |R| = [32m8.187679e-05[39m
+      1 Linear |R| = [32m1.655648e-19[39m
+
+    Computing Residual                                                                   [[33m  5.82 s[39m] [[33m  353 MB[39m]
+    Computing Residual                                                                   [[33m  5.77 s[39m] [[33m  353 MB[39m]
+ 1 Nonlinear |R| = [32m4.092106e-05[39m
+    Computing Jacobian                                                                   [[33m  6.16 s[39m] [[33m  353 MB[39m]
+      0 Linear |R| = [32m4.092106e-05[39m
+      1 Linear |R| = [32m9.305998e-20[39m
+    Computing Residual                                                                   [[33m  5.83 s[39m] [[33m  353 MB[39m]
+    Computing Residual                                                                   [[33m  5.89 s[39m] [[33m  353 MB[39m]
+ 2 Nonlinear |R| = [32m1.974743e-05[39m
+    Computing Jacobian                                                                   [[33m  5.94 s[39m] [[33m  353 MB[39m]
+      0 Linear |R| = [32m1.974743e-05[39m
+      1 Linear |R| = [32m5.744658e-20[39m
+
+    Computing Residual                                                                   [[33m  5.86 s[39m] [[33m  353 MB[39m]
+    Computing Residual                                                                   [[33m  5.89 s[39m] [[33m  353 MB[39m]
+ 3 Nonlinear |R| = [32m9.168703e-06[39m
+    Computing Jacobian                                                                   [[33m  6.25 s[39m] [[33m  353 MB[39m]
+      0 Linear |R| = [32m9.168703e-06[39m
+      1 Linear |R| = [32m3.243612e-20[39m
+    Computing Residual                                                                   [[33m  5.33 s[39m] [[33m  353 MB[39m]
+    Computing Residual                                                                   [[33m  5.87 s[39m] [[33m  353 MB[39m]
+ 4 Nonlinear |R| = [32m4.030543e-06[39m
+    Computing Jacobian                                                                   [[33m  6.14 s[39m] [[33m  353 MB[39m]
+      0 Linear |R| = [32m4.030543e-06[39m
+      1 Linear |R| = [32m1.721990e-20[39m
+    Computing Residual                                                                   [[33m  5.82 s[39m] [[33m  353 MB[39m]
+    Computing Residual                                                                   [[33m  5.79 s[39m] [[33m  353 MB[39m]
+ 5 Nonlinear |R| = [32m1.576433e-06[39m
+    Computing Jacobian                                                                   [[33m  6.17 s[39m] [[33m  353 MB[39m]
+      0 Linear |R| = [32m1.576433e-06[39m
+      1 Linear |R| = [32m7.347140e-21[39m
+
+    Computing Residual                                                                   [[33m  5.82 s[39m] [[33m  353 MB[39m]
+    Computing Residual                                                                   [[33m  5.89 s[39m] [[33m  353 MB[39m]
+ 6 Nonlinear |R| = [32m4.691407e-07[39m
+    Computing Jacobian                                                                   [[33m  6.18 s[39m] [[33m  353 MB[39m]
+      0 Linear |R| = [32m4.691407e-07[39m
+      1 Linear |R| = [32m7.338258e-22[39m
+    Computing Residual                                                                   [[33m  5.84 s[39m] [[33m  353 MB[39m]
+    Computing Residual                                                                   [[33m  5.28 s[39m] [[33m  353 MB[39m]
+ 7 Nonlinear |R| = [32m1.759226e-07[39m
+    Computing Jacobian                                                                   [[33m  6.14 s[39m] [[33m  353 MB[39m]
+      0 Linear |R| = [32m1.759226e-07[39m
+      1 Linear |R| = [32m3.414877e-22[39m
+    Computing Residual                                                                   [[33m  5.80 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.84 s[39m] [[33m  354 MB[39m]
+ 8 Nonlinear |R| = [32m1.022231e-07[39m
+    Computing Jacobian                                                                   [[33m  6.20 s[39m] [[33m  354 MB[39m]
+      0 Linear |R| = [32m1.022231e-07[39m
+      1 Linear |R| = [32m1.761357e-22[39m
+    Computing Residual                                                                   [[33m  5.83 s[39m] [[33m  354 MB[39m]
+    Computing Residual                                                                   [[33m  5.85 s[39m] [[33m  354 MB[39m]
+ 9 Nonlinear |R| = [32m7.014447e-08[39m
+  Finished Solving                                                                       [[33m214.85 s[39m] [[33m  316 MB[39m]
+[32m Solve Converged![39m
+Still Executing
+  Finished Computing User Objects                                                        [[33m  6.69 s[39m] [[33m  316 MB[39m]
+
+Postprocessor Values:
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+| time           | Ep_eff         | Nloop_1        | Nloop_10       | Nloop_11       | Nloop_12       | Nloop_13       |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+|   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |
+|   3.971641e+02 |   2.672256e-08 |   3.578125e+12 |   3.578125e+12 |   3.578125e+12 |   3.578125e+12 |   3.578125e+12 |
+|   3.971641e+03 |   3.392843e-07 |   3.578126e+12 |   3.578126e+12 |   3.578126e+12 |   3.578126e+12 |   3.578126e+12 |
+|   3.971641e+04 |   3.462121e-06 |   3.578131e+12 |   3.578131e+12 |   3.578131e+12 |   3.578131e+12 |   3.578131e+12 |
+|   3.971641e+05 |   3.442116e-05 |   3.578149e+12 |   3.578149e+12 |   3.578149e+12 |   3.578149e+12 |   3.578149e+12 |
+|   1.255943e+06 |   1.068451e-04 |   3.578168e+12 |   3.578168e+12 |   3.578168e+12 |   3.578168e+12 |   3.578168e+12 |
+|   3.971641e+06 |   3.226034e-04 |   3.578202e+12 |   3.578202e+12 |   3.578202e+12 |   3.578202e+12 |   3.578202e+12 |
+|   9.374863e+06 |   7.153770e-04 |   3.578240e+12 |   3.578240e+12 |   3.578240e+12 |   3.578240e+12 |   3.578240e+12 |
+|   2.964592e+07 |   2.007994e-03 |   3.578319e+12 |   3.578320e+12 |   3.578320e+12 |   3.578320e+12 |   3.578319e+12 |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+| time           | Nloop_14       | Nloop_15       | Nloop_16       | Nloop_17       | Nloop_18       | Nloop_19       |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+|   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |
+|   3.971641e+02 |   3.578125e+12 |   3.578125e+12 |   3.578125e+12 |   3.578125e+12 |   3.578125e+12 |   3.578125e+12 |
+|   3.971641e+03 |   3.578126e+12 |   3.578126e+12 |   3.578126e+12 |   3.578126e+12 |   3.578126e+12 |   3.578126e+12 |
+|   3.971641e+04 |   3.578131e+12 |   3.578131e+12 |   3.578131e+12 |   3.578131e+12 |   3.578131e+12 |   3.578132e+12 |
+|   3.971641e+05 |   3.578149e+12 |   3.578149e+12 |   3.578149e+12 |   3.578149e+12 |   3.578149e+12 |   3.578151e+12 |
+|   1.255943e+06 |   3.578168e+12 |   3.578168e+12 |   3.578168e+12 |   3.578168e+12 |   3.578168e+12 |   3.578173e+12 |
+|   3.971641e+06 |   3.578202e+12 |   3.578202e+12 |   3.578200e+12 |   3.578200e+12 |   3.578200e+12 |   3.578210e+12 |
+|   9.374863e+06 |   3.578240e+12 |   3.578240e+12 |   3.578238e+12 |   3.578238e+12 |   3.578238e+12 |   3.578252e+12 |
+|   2.964592e+07 |   3.578319e+12 |   3.578319e+12 |   3.578316e+12 |   3.578316e+12 |   3.578316e+12 |   3.578337e+12 |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+| time           | Nloop_2        | Nloop_20       | Nloop_21       | Nloop_22       | Nloop_23       | Nloop_24       |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+|   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |
+|   3.971641e+02 |   3.578125e+12 |   3.578125e+12 |   3.578125e+12 |   3.578125e+12 |   3.578125e+12 |   3.578125e+12 |
+|   3.971641e+03 |   3.578126e+12 |   3.578126e+12 |   3.578126e+12 |   3.578126e+12 |   3.578126e+12 |   3.578126e+12 |
+|   3.971641e+04 |   3.578131e+12 |   3.578132e+12 |   3.578132e+12 |   3.578131e+12 |   3.578131e+12 |   3.578131e+12 |
+|   3.971641e+05 |   3.578149e+12 |   3.578151e+12 |   3.578151e+12 |   3.578149e+12 |   3.578149e+12 |   3.578149e+12 |
+|   1.255943e+06 |   3.578168e+12 |   3.578173e+12 |   3.578173e+12 |   3.578168e+12 |   3.578168e+12 |   3.578168e+12 |
+|   3.971641e+06 |   3.578202e+12 |   3.578210e+12 |   3.578210e+12 |   3.578202e+12 |   3.578202e+12 |   3.578202e+12 |
+|   9.374863e+06 |   3.578240e+12 |   3.578252e+12 |   3.578252e+12 |   3.578240e+12 |   3.578240e+12 |   3.578240e+12 |
+|   2.964592e+07 |   3.578319e+12 |   3.578337e+12 |   3.578337e+12 |   3.578320e+12 |   3.578320e+12 |   3.578320e+12 |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+| time           | Nloop_3        | Nloop_4        | Nloop_5        | Nloop_6        | Nloop_7        | Nloop_8        |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+|   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |
+|   3.971641e+02 |   3.578125e+12 |   3.578125e+12 |   3.578125e+12 |   3.578125e+12 |   3.578125e+12 |   3.578125e+12 |
+|   3.971641e+03 |   3.578126e+12 |   3.578126e+12 |   3.578126e+12 |   3.578126e+12 |   3.578126e+12 |   3.578126e+12 |
+|   3.971641e+04 |   3.578131e+12 |   3.578131e+12 |   3.578131e+12 |   3.578131e+12 |   3.578132e+12 |   3.578132e+12 |
+|   3.971641e+05 |   3.578149e+12 |   3.578149e+12 |   3.578149e+12 |   3.578149e+12 |   3.578151e+12 |   3.578151e+12 |
+|   1.255943e+06 |   3.578168e+12 |   3.578168e+12 |   3.578168e+12 |   3.578168e+12 |   3.578173e+12 |   3.578173e+12 |
+|   3.971641e+06 |   3.578202e+12 |   3.578200e+12 |   3.578200e+12 |   3.578200e+12 |   3.578210e+12 |   3.578210e+12 |
+|   9.374863e+06 |   3.578240e+12 |   3.578238e+12 |   3.578238e+12 |   3.578238e+12 |   3.578252e+12 |   3.578252e+12 |
+|   2.964592e+07 |   3.578319e+12 |   3.578316e+12 |   3.578316e+12 |   3.578316e+12 |   3.578337e+12 |   3.578337e+12 |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+| time           | Nloop_9        | cslipr_1       | cslipr_10      | cslipr_11      | cslipr_12      | cslipr_13      |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+|   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |
+|   3.971641e+02 |   3.578125e+12 |   5.052237e-12 |   5.055272e-12 |   5.055272e-12 |   5.055272e-12 |   5.052237e-12 |
+|   3.971641e+03 |   3.578126e+12 |   5.051664e-12 |   5.054768e-12 |   5.054768e-12 |   5.054768e-12 |   5.051664e-12 |
+|   3.971641e+04 |   3.578132e+12 |   5.045983e-12 |   5.049747e-12 |   5.049747e-12 |   5.049747e-12 |   5.045983e-12 |
+|   3.971641e+05 |   3.578151e+12 |   4.992907e-12 |   5.002224e-12 |   5.002224e-12 |   5.002224e-12 |   4.992907e-12 |
+|   1.255943e+06 |   3.578173e+12 |   4.875149e-12 |   4.889299e-12 |   4.889299e-12 |   4.889299e-12 |   4.875149e-12 |
+|   3.971641e+06 |   3.578210e+12 |   4.665807e-12 |   4.663037e-12 |   4.663037e-12 |   4.663037e-12 |   4.665807e-12 |
+|   9.374863e+06 |   3.578252e+12 |   4.451316e-12 |   4.455651e-12 |   4.455651e-12 |   4.455651e-12 |   4.451316e-12 |
+|   2.964592e+07 |   3.578337e+12 |   4.222176e-12 |   4.211406e-12 |   4.211406e-12 |   4.211406e-12 |   4.222176e-12 |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+| time           | cslipr_14      | cslipr_15      | cslipr_16      | cslipr_17      | cslipr_18      | cslipr_19      |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+|   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |
+|   3.971641e+02 |   5.052237e-12 |   5.052237e-12 |   4.971245e-12 |   4.971245e-12 |   4.971245e-12 |   5.582465e-12 |
+|   3.971641e+03 |   5.051664e-12 |   5.051664e-12 |   4.970631e-12 |   4.970631e-12 |   4.970631e-12 |   5.581921e-12 |
+|   3.971641e+04 |   5.045983e-12 |   5.045983e-12 |   4.964525e-12 |   4.964525e-12 |   4.964525e-12 |   5.576512e-12 |
+|   3.971641e+05 |   4.992907e-12 |   4.992907e-12 |   4.907000e-12 |   4.907000e-12 |   4.907000e-12 |   5.525455e-12 |
+|   1.255943e+06 |   4.875149e-12 |   4.875149e-12 |   4.772248e-12 |   4.772248e-12 |   4.772248e-12 |   5.406611e-12 |
+|   3.971641e+06 |   4.665807e-12 |   4.665807e-12 |   4.528088e-12 |   4.528088e-12 |   4.528088e-12 |   5.176842e-12 |
+|   9.374863e+06 |   4.451316e-12 |   4.451316e-12 |   4.349679e-12 |   4.349679e-12 |   4.349679e-12 |   4.900006e-12 |
+|   2.964592e+07 |   4.222176e-12 |   4.222176e-12 |   4.212227e-12 |   4.212227e-12 |   4.212227e-12 |   4.449231e-12 |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+| time           | cslipr_2       | cslipr_20      | cslipr_21      | cslipr_22      | cslipr_23      | cslipr_24      |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+|   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |
+|   3.971641e+02 |   5.052237e-12 |   5.582465e-12 |   5.582465e-12 |   5.055272e-12 |   5.055272e-12 |   5.055272e-12 |
+|   3.971641e+03 |   5.051664e-12 |   5.581921e-12 |   5.581921e-12 |   5.054768e-12 |   5.054768e-12 |   5.054768e-12 |
+|   3.971641e+04 |   5.045983e-12 |   5.576512e-12 |   5.576512e-12 |   5.049747e-12 |   5.049747e-12 |   5.049747e-12 |
+|   3.971641e+05 |   4.992907e-12 |   5.525455e-12 |   5.525455e-12 |   5.002224e-12 |   5.002224e-12 |   5.002224e-12 |
+|   1.255943e+06 |   4.875149e-12 |   5.406611e-12 |   5.406611e-12 |   4.889299e-12 |   4.889299e-12 |   4.889299e-12 |
+|   3.971641e+06 |   4.665807e-12 |   5.176842e-12 |   5.176842e-12 |   4.663037e-12 |   4.663037e-12 |   4.663037e-12 |
+|   9.374863e+06 |   4.451316e-12 |   4.900006e-12 |   4.900006e-12 |   4.455651e-12 |   4.455651e-12 |   4.455651e-12 |
+|   2.964592e+07 |   4.222176e-12 |   4.449231e-12 |   4.449231e-12 |   4.211406e-12 |   4.211406e-12 |   4.211406e-12 |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+| time           | cslipr_3       | cslipr_4       | cslipr_5       | cslipr_6       | cslipr_7       | cslipr_8       |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+|   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |
+|   3.971641e+02 |   5.052237e-12 |   4.971245e-12 |   4.971245e-12 |   4.971245e-12 |   5.582465e-12 |   5.582465e-12 |
+|   3.971641e+03 |   5.051664e-12 |   4.970631e-12 |   4.970631e-12 |   4.970631e-12 |   5.581921e-12 |   5.581921e-12 |
+|   3.971641e+04 |   5.045983e-12 |   4.964525e-12 |   4.964525e-12 |   4.964525e-12 |   5.576512e-12 |   5.576512e-12 |
+|   3.971641e+05 |   4.992907e-12 |   4.907000e-12 |   4.907000e-12 |   4.907000e-12 |   5.525455e-12 |   5.525455e-12 |
+|   1.255943e+06 |   4.875149e-12 |   4.772248e-12 |   4.772248e-12 |   4.772248e-12 |   5.406611e-12 |   5.406611e-12 |
+|   3.971641e+06 |   4.665807e-12 |   4.528088e-12 |   4.528088e-12 |   4.528088e-12 |   5.176842e-12 |   5.176842e-12 |
+|   9.374863e+06 |   4.451316e-12 |   4.349679e-12 |   4.349679e-12 |   4.349679e-12 |   4.900006e-12 |   4.900006e-12 |
+|   2.964592e+07 |   4.222176e-12 |   4.212227e-12 |   4.212227e-12 |   4.212227e-12 |   4.449231e-12 |   4.449231e-12 |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+| time           | cslipr_9       | cstrainfrac1   | cstrainfrac2   | dloop_1        | dloop_10       | dloop_11       |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+|   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |
+|   3.971641e+02 |   5.582465e-12 |   1.000000e+00 |   1.000000e+00 |   6.729409e-06 |   6.729442e-06 |   6.729442e-06 |
+|   3.971641e+03 |   5.581921e-12 |   1.000000e+00 |   1.000000e+00 |   9.496633e-06 |   9.496917e-06 |   9.496917e-06 |
+|   3.971641e+04 |   5.576512e-12 |   1.000000e+00 |   1.000000e+00 |   2.349167e-05 |   2.349286e-05 |   2.349286e-05 |
+|   3.971641e+05 |   5.525455e-12 |   1.000000e+00 |   1.000000e+00 |   7.215174e-05 |   7.215570e-05 |   7.215570e-05 |
+|   1.255943e+06 |   5.406611e-12 |   1.000000e+00 |   1.000000e+00 |   1.267242e-04 |   1.267313e-04 |   1.267313e-04 |
+|   3.971641e+06 |   5.176842e-12 |   1.000000e+00 |   1.000000e+00 |   2.244423e-04 |   2.244552e-04 |   2.244552e-04 |
+|   9.374863e+06 |   4.900006e-12 |   1.000000e+00 |   1.000000e+00 |   3.441279e-04 |   3.441491e-04 |   3.441491e-04 |
+|   2.964592e+07 |   4.449231e-12 |   1.000000e+00 |   1.000000e+00 |   6.111460e-04 |   6.111630e-04 |   6.111630e-04 |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+| time           | dloop_12       | dloop_13       | dloop_14       | dloop_15       | dloop_16       | dloop_17       |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+|   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |
+|   3.971641e+02 |   6.729442e-06 |   6.729409e-06 |   6.729409e-06 |   6.729409e-06 |   6.729411e-06 |   6.729411e-06 |
+|   3.971641e+03 |   9.496917e-06 |   9.496633e-06 |   9.496633e-06 |   9.496633e-06 |   9.496657e-06 |   9.496657e-06 |
+|   3.971641e+04 |   2.349286e-05 |   2.349167e-05 |   2.349167e-05 |   2.349167e-05 |   2.349177e-05 |   2.349177e-05 |
+|   3.971641e+05 |   7.215570e-05 |   7.215174e-05 |   7.215174e-05 |   7.215174e-05 |   7.215222e-05 |   7.215222e-05 |
+|   1.255943e+06 |   1.267313e-04 |   1.267242e-04 |   1.267242e-04 |   1.267242e-04 |   1.267258e-04 |   1.267258e-04 |
+|   3.971641e+06 |   2.244552e-04 |   2.244423e-04 |   2.244423e-04 |   2.244423e-04 |   2.244506e-04 |   2.244506e-04 |
+|   9.374863e+06 |   3.441491e-04 |   3.441279e-04 |   3.441279e-04 |   3.441279e-04 |   3.441620e-04 |   3.441620e-04 |
+|   2.964592e+07 |   6.111630e-04 |   6.111460e-04 |   6.111460e-04 |   6.111460e-04 |   6.112864e-04 |   6.112864e-04 |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+| time           | dloop_18       | dloop_19       | dloop_2        | dloop_20       | dloop_21       | dloop_22       |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+|   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |
+|   3.971641e+02 |   6.729411e-06 |   6.729447e-06 |   6.729409e-06 |   6.729447e-06 |   6.729447e-06 |   6.729442e-06 |
+|   3.971641e+03 |   9.496657e-06 |   9.496956e-06 |   9.496633e-06 |   9.496956e-06 |   9.496956e-06 |   9.496917e-06 |
+|   3.971641e+04 |   2.349177e-05 |   2.349298e-05 |   2.349167e-05 |   2.349298e-05 |   2.349298e-05 |   2.349286e-05 |
+|   3.971641e+05 |   7.215222e-05 |   7.215499e-05 |   7.215174e-05 |   7.215499e-05 |   7.215499e-05 |   7.215570e-05 |
+|   1.255943e+06 |   1.267258e-04 |   1.267252e-04 |   1.267242e-04 |   1.267252e-04 |   1.267252e-04 |   1.267313e-04 |
+|   3.971641e+06 |   2.244506e-04 |   2.244176e-04 |   2.244423e-04 |   2.244176e-04 |   2.244176e-04 |   2.244552e-04 |
+|   9.374863e+06 |   3.441620e-04 |   3.440119e-04 |   3.441279e-04 |   3.440119e-04 |   3.440119e-04 |   3.441491e-04 |
+|   2.964592e+07 |   6.112864e-04 |   6.105209e-04 |   6.111460e-04 |   6.105209e-04 |   6.105209e-04 |   6.111630e-04 |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+| time           | dloop_23       | dloop_24       | dloop_3        | dloop_4        | dloop_5        | dloop_6        |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+|   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |
+|   3.971641e+02 |   6.729442e-06 |   6.729442e-06 |   6.729409e-06 |   6.729411e-06 |   6.729411e-06 |   6.729411e-06 |
+|   3.971641e+03 |   9.496917e-06 |   9.496917e-06 |   9.496633e-06 |   9.496657e-06 |   9.496657e-06 |   9.496657e-06 |
+|   3.971641e+04 |   2.349286e-05 |   2.349286e-05 |   2.349167e-05 |   2.349177e-05 |   2.349177e-05 |   2.349177e-05 |
+|   3.971641e+05 |   7.215570e-05 |   7.215570e-05 |   7.215174e-05 |   7.215222e-05 |   7.215222e-05 |   7.215222e-05 |
+|   1.255943e+06 |   1.267313e-04 |   1.267313e-04 |   1.267242e-04 |   1.267258e-04 |   1.267258e-04 |   1.267258e-04 |
+|   3.971641e+06 |   2.244552e-04 |   2.244552e-04 |   2.244423e-04 |   2.244506e-04 |   2.244506e-04 |   2.244506e-04 |
+|   9.374863e+06 |   3.441491e-04 |   3.441491e-04 |   3.441279e-04 |   3.441620e-04 |   3.441620e-04 |   3.441620e-04 |
+|   2.964592e+07 |   6.111630e-04 |   6.111630e-04 |   6.111460e-04 |   6.112864e-04 |   6.112864e-04 |   6.112864e-04 |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+| time           | dloop_7        | dloop_8        | dloop_9        | eeq            | gslipr_1       | gslipr_10      |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+|   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |
+|   3.971641e+02 |   6.729447e-06 |   6.729447e-06 |   6.729447e-06 |   3.327721e-04 |   1.115036e-36 |  -3.206273e-36 |
+|   3.971641e+03 |   9.496956e-06 |   9.496956e-06 |   9.496956e-06 |   3.330372e-04 |   5.506618e-37 |  -1.608881e-36 |
+|   3.971641e+04 |   2.349298e-05 |   2.349298e-05 |   2.349298e-05 |   3.356904e-04 |   2.584182e-38 |  -8.621680e-38 |
+|   3.971641e+05 |   7.215499e-05 |   7.215499e-05 |   7.215499e-05 |   3.623822e-04 |  -6.995637e-43 |  -2.184934e-40 |
+|   1.255943e+06 |   1.267252e-04 |   1.267252e-04 |   1.267252e-04 |   4.269572e-04 |  -1.727915e-42 |  -4.651090e-42 |
+|   3.971641e+06 |   2.244176e-04 |   2.244176e-04 |   2.244176e-04 |   6.288675e-04 |  -1.483391e-43 |  -3.885441e-43 |
+|   9.374863e+06 |   3.440119e-04 |   3.440119e-04 |   3.440119e-04 |   1.009725e-03 |   1.391823e-43 |   5.636516e-43 |
+|   2.964592e+07 |   6.105209e-04 |   6.105209e-04 |   6.105209e-04 |   2.294566e-03 |   1.912747e-39 |   3.889969e-39 |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+| time           | gslipr_11      | gslipr_12      | gslipr_13      | gslipr_14      | gslipr_15      | gslipr_16      |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+|   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |
+|   3.971641e+02 |   1.130319e-33 |   4.964391e-34 |  -1.753559e-36 |  -2.323383e-36 |   1.908675e-37 |   1.433225e-36 |
+|   3.971641e+03 |   5.335354e-34 |   2.336395e-34 |  -8.661499e-37 |  -1.175891e-36 |   9.538274e-38 |   7.288982e-37 |
+|   3.971641e+04 |   2.166487e-35 |   9.525876e-36 |  -4.236675e-38 |  -6.572712e-38 |   5.791128e-39 |   4.280592e-38 |
+|   3.971641e+05 |   2.434013e-38 |   1.329832e-38 |  -4.780896e-41 |  -1.787140e-40 |   4.311296e-41 |   1.682906e-40 |
+|   1.255943e+06 |   1.273970e-40 |   1.167639e-40 |   8.641013e-43 |  -2.253446e-42 |   1.525864e-42 |   4.291646e-42 |
+|   3.971641e+06 |   2.378739e-42 |   2.190115e-43 |  -2.445678e-43 |   2.524338e-43 |   3.378442e-44 |   2.426493e-43 |
+|   9.374863e+06 |   5.111447e-42 |  -1.115405e-42 |  -1.339326e-42 |   2.212973e-42 |   9.594846e-45 |   6.920445e-43 |
+|   2.964592e+07 |   4.483491e-39 |   3.370474e-39 |  -2.386423e-40 |  -1.651840e-39 |   3.343015e-40 |  -6.000715e-41 |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+| time           | gslipr_17      | gslipr_18      | gslipr_19      | gslipr_2       | gslipr_20      | gslipr_21      |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+|   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |
+|   3.971641e+02 |  -1.199551e-36 |   4.638429e-36 |  -5.778508e-36 |  -1.897599e-36 |  -4.621619e-36 |  -4.160790e-36 |
+|   3.971641e+03 |  -5.755316e-37 |   2.279129e-36 |  -2.892827e-36 |  -9.611617e-37 |  -2.288036e-36 |  -2.079580e-36 |
+|   3.971641e+04 |  -1.948110e-38 |   1.136466e-37 |  -1.505611e-37 |  -5.396968e-38 |  -1.135158e-37 |  -1.075384e-37 |
+|   3.971641e+05 |   2.095495e-40 |   2.929204e-40 |  -2.331679e-40 |  -1.473819e-40 |  -1.642636e-40 |  -1.969127e-40 |
+|   1.255943e+06 |   1.850249e-41 |   5.733544e-42 |   4.668495e-42 |  -1.140569e-42 |   1.151763e-42 |  -2.348257e-42 |
+|   3.971641e+06 |   7.639265e-42 |   3.631961e-43 |   2.961097e-42 |   1.112406e-42 |   3.575727e-43 |  -1.707020e-43 |
+|   9.374863e+06 |   2.851137e-41 |   2.254586e-42 |   1.347044e-41 |   8.392599e-42 |   8.530654e-43 |  -1.080854e-42 |
+|   2.964592e+07 |  -3.255267e-37 |   4.088059e-39 |  -1.891869e-37 |   2.083884e-39 |   1.203724e-39 |   1.007002e-38 |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+| time           | gslipr_22      | gslipr_23      | gslipr_24      | gslipr_3       | gslipr_4       | gslipr_5       |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+|   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |
+|   3.971641e+02 |   1.379561e-34 |  -1.492297e-35 |  -2.042802e-36 |  -2.669232e-35 |   3.504247e-36 |   9.745377e-36 |
+|   3.971641e+03 |   6.652871e-35 |  -7.230704e-36 |  -9.976405e-37 |  -1.288186e-35 |   1.756245e-36 |   4.848531e-36 |
+|   3.971641e+04 |   3.022371e-36 |  -3.293981e-37 |  -3.689179e-38 |  -5.961481e-37 |   9.355012e-38 |   2.465150e-37 |
+|   3.971641e+05 |   5.452368e-39 |  -4.264186e-40 |   2.386607e-40 |  -1.391518e-39 |   2.291519e-40 |   3.662840e-40 |
+|   1.255943e+06 |   6.828389e-41 |   3.630259e-42 |   1.239400e-41 |  -2.758587e-41 |   3.995661e-42 |  -7.511100e-42 |
+|   3.971641e+06 |   4.594299e-42 |   1.275468e-42 |   7.823089e-43 |  -1.054690e-42 |   3.217727e-43 |  -4.972793e-42 |
+|   9.374863e+06 |   8.345573e-42 |   2.129042e-42 |   8.985009e-43 |  -5.723494e-43 |   4.665301e-43 |  -1.379441e-41 |
+|   2.964592e+07 |   3.813364e-39 |   1.211636e-39 |   6.004594e-39 |   3.428172e-40 |  -9.832573e-39 |   1.913536e-38 |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+| time           | gslipr_6       | gslipr_7       | gslipr_8       | gslipr_9       | rho_i          | rho_m          |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+|   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |
+|   3.971641e+02 |  -5.123483e-36 |  -7.044251e-36 |   8.004175e-36 |  -7.221483e-36 |   1.599999e+07 |   3.999998e+06 |
+|   3.971641e+03 |  -2.520197e-36 |  -3.445864e-36 |   3.956504e-36 |  -3.568496e-36 |   1.599992e+07 |   3.999972e+06 |
+|   3.971641e+04 |  -1.267941e-37 |  -1.660311e-37 |   2.024364e-37 |  -1.776494e-37 |   1.599916e+07 |   3.999714e+06 |
+|   3.971641e+05 |  -3.251423e-40 |  -3.359566e-40 |   5.583020e-40 |  -3.835341e-40 |   1.599161e+07 |   3.997150e+06 |
+|   1.255943e+06 |  -4.524409e-42 |  -4.373834e-42 |   1.312416e-41 |  -1.155542e-41 |   1.597376e+07 |   3.991122e+06 |
+|   3.971641e+06 |  -4.466159e-43 |  -2.666596e-43 |   1.468305e-42 |  -1.986594e-42 |   1.591910e+07 |   3.972912e+06 |
+|   9.374863e+06 |  -1.569169e-42 |  -7.031063e-43 |   1.816709e-42 |  -2.797037e-42 |   1.581508e+07 |   3.938929e+06 |
+|   2.964592e+07 |   7.667460e-39 |  -4.230052e-39 |  -1.469091e-37 |  -1.591869e-40 |   1.545081e+07 |   3.823231e+06 |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+| time           | strain_xx      | strain_yy      | strain_zz      | stress_xx      | stress_yy      | stress_zz      | vonmises       |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+|   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |   0.000000e+00 |
+|   3.971641e+02 |  -1.584851e-04 |   3.489165e-04 |   9.872945e-05 |  -2.822109e-04 |   9.237762e+01 |   4.618971e+01 |   8.248902e+01 |
+|   3.971641e+03 |  -1.584749e-04 |   3.492880e-04 |   9.879065e-05 |  -2.817158e-04 |   9.237762e+01 |   4.618971e+01 |   8.248483e+01 |
+|   3.971641e+04 |  -1.583719e-04 |   3.530005e-04 |   9.940223e-05 |  -2.770504e-04 |   9.237763e+01 |   4.618971e+01 |   8.244348e+01 |
+|   3.971641e+05 |  -1.572685e-04 |   3.898136e-04 |   1.054726e-04 |  -5.870973e-04 |   9.237722e+01 |   4.618929e+01 |   8.208170e+01 |
+|   1.255943e+06 |  -1.540383e-04 |   4.759453e-04 |   1.198323e-04 |  -1.373469e-03 |   9.237601e+01 |   4.618825e+01 |   8.152693e+01 |
+|   3.971641e+06 |  -1.394677e-04 |   7.313754e-04 |   1.656305e-04 |  -8.921250e-03 |   9.236928e+01 |   4.618008e+01 |   8.134361e+01 |
+|   9.374863e+06 |  -9.809609e-05 |   1.186999e-03 |   2.673893e-04 |   7.407843e-04 |   9.237668e+01 |   4.618818e+01 |   8.335602e+01 |
+|   2.964592e+07 |   1.148625e-04 |   2.594190e-03 |   7.664789e-04 |   2.799565e-02 |   9.238852e+01 |   4.620168e+01 |   9.766921e+01 |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+
+
+Time Step 81, time = 3e+07, dt = 354081
+ * Nonlinear |R| = [32m1.083833e-04[39m (Before preset BCs, predictors, correctors, and constraints)
+  Applying predictor with scale factor = 1
+  Finished Solving                                                                       [[33m 71.33 s[39m] [[33m  316 MB[39m]
+[32m Solve Converged![39m
+  Finished Computing User Objects                                                        [[33m  5.28 s[39m] [[33m  316 MB[39m]
+
+
+Performance Graph:
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|                                Section                               | Calls |   Self(s)  |   Avg(s)   |    %   | Mem(MB) |  Total(s)  |   Avg(s)   |    %   | Mem(MB) |
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| RhocpApp (main)                                                      |     3 |      0.038 |      0.013 |   0.00 |       7 |   6094.847 |   2031.616 | 100.00 |     725 |
+|   Action::SetupMeshAction::Mesh::SetupMeshAction::act::setup_mesh    |     3 |      0.006 |      0.002 |   0.00 |       0 |      0.006 |      0.002 |   0.00 |       0 |
+|   Action::SetupMeshAction::Mesh::SetupMeshAction::act::set_mesh_base |     6 |      0.206 |      0.034 |   0.00 |       4 |      1.802 |      0.300 |   0.03 |      19 |
+|   MeshGeneratorSystem::createMeshGeneratorOrder                      |     1 |      0.000 |      0.000 |   0.00 |       0 |      0.000 |      0.000 |   0.00 |       0 |
+|   FEProblem::computeUserObjects                                      |     6 |      0.001 |      0.000 |   0.00 |       0 |      0.001 |      0.000 |   0.00 |       0 |
+|   FEProblem::computeUserObjects                                      |     3 |      0.000 |      0.000 |   0.00 |       0 |      0.000 |      0.000 |   0.00 |       0 |
+|   FEProblem::outputStep                                              |    82 |      5.541 |      0.068 |   0.09 |       0 |      9.568 |      0.117 |   0.16 |      56 |
+|   Transient::PicardSolve                                             |    82 |      0.342 |      0.004 |   0.01 |       0 |   5595.604 |     68.239 |  91.81 |      58 |
+|     FEProblem::computeUserObjects                                    |   652 |    516.344 |      0.792 |   8.47 |       0 |    516.344 |      0.792 |   8.47 |       0 |
+|     FEProblem::outputStep                                            |   246 |     16.736 |      0.068 |   0.27 |       0 |     16.801 |      0.068 |   0.28 |       0 |
+|     FEProblem::solve                                                 |    82 |   1050.243 |     12.808 |  17.23 |     316 |   4666.318 |     56.906 |  76.56 |     136 |
+|       FEProblem::computeUserObjects                                  |   608 |      0.004 |      0.000 |   0.00 |       0 |      0.004 |      0.000 |   0.00 |       0 |
+|       FEProblem::computeResidualInternal                             |    82 |      0.011 |      0.000 |   0.00 |       0 |    441.931 |      5.389 |   7.25 |     -71 |
+|         FEProblem::computeUserObjects                                |   164 |      0.002 |      0.000 |   0.00 |       0 |      0.002 |      0.000 |   0.00 |       0 |
+|       FEProblem::computeResidualInternal                             |   366 |      0.060 |      0.000 |   0.00 |       0 |   1923.523 |      5.256 |  31.56 |     -74 |
+|         FEProblem::computeUserObjects                                |   732 |      0.007 |      0.000 |   0.00 |       0 |      0.007 |      0.000 |   0.00 |       0 |
+|       FEProblem::computeJacobianInternal                             |   222 |      0.080 |      0.000 |   0.00 |       0 |   1248.688 |      5.625 |  20.49 |     -35 |
+|         FEProblem::computeUserObjects                                |   444 |      0.004 |      0.000 |   0.00 |       0 |      0.004 |      0.000 |   0.00 |       0 |
+|   Transient::final                                                   |     1 |      0.001 |      0.001 |   0.00 |       0 |      0.028 |      0.028 |   0.00 |       0 |
+|     FEProblem::computeUserObjects                                    |     2 |      0.000 |      0.000 |   0.00 |       0 |      0.000 |      0.000 |   0.00 |       0 |
+|     FEProblem::outputStep                                            |     1 |      0.027 |      0.027 |   0.00 |       0 |      0.027 |      0.027 |   0.00 |       0 |
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Finished Executing                                                                       [[33m2987.28 s[39m] [[33m  316 MB[39m]

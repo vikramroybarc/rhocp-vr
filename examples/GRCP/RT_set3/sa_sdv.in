@@ -1,0 +1,190 @@
+[AuxVariables]
+	 [sa_hard_1]
+	 	 order = CONSTANT
+	 	 family = MONOMIAL
+	 []
+
+	 [sa_hard_2]
+	 	 order = CONSTANT
+	 	 family = MONOMIAL
+	 []
+
+	 [sa_hard_3]
+	 	 order = CONSTANT
+	 	 family = MONOMIAL
+	 []
+
+	 [sa_hard_4]
+	 	 order = CONSTANT
+	 	 family = MONOMIAL
+	 []
+
+	 [sa_hard_5]
+	 	 order = CONSTANT
+	 	 family = MONOMIAL
+	 []
+
+	 [sa_hard_6]
+	 	 order = CONSTANT
+	 	 family = MONOMIAL
+	 []
+
+	 [sa_hard_7]
+	 	 order = CONSTANT
+	 	 family = MONOMIAL
+	 []
+
+	 [sa_hard_8]
+	 	 order = CONSTANT
+	 	 family = MONOMIAL
+	 []
+
+	 [sa_hard_9]
+	 	 order = CONSTANT
+	 	 family = MONOMIAL
+	 []
+
+	 [sa_hard_10]
+	 	 order = CONSTANT
+	 	 family = MONOMIAL
+	 []
+
+	 [sa_hard_11]
+	 	 order = CONSTANT
+	 	 family = MONOMIAL
+	 []
+
+	 [sa_hard_12]
+	 	 order = CONSTANT
+	 	 family = MONOMIAL
+	 []
+
+[]
+
+
+[AuxKernels]
+	 [sa_hard_1]
+	 	  type = StateVariable 
+	 	 variable = sa_hard_1
+	 	 sdv_id = 63
+	 	 execute_on = timestep_end
+	 []
+	 [sa_hard_2]
+	 	  type = StateVariable 
+	 	 variable = sa_hard_2
+	 	 sdv_id = 64
+	 	 execute_on = timestep_end
+	 []
+	 [sa_hard_3]
+	 	  type = StateVariable 
+	 	 variable = sa_hard_3
+	 	 sdv_id = 65
+	 	 execute_on = timestep_end
+	 []
+	 [sa_hard_4]
+	 	  type = StateVariable 
+	 	 variable = sa_hard_4
+	 	 sdv_id = 66
+	 	 execute_on = timestep_end
+	 []
+	 [sa_hard_5]
+	 	  type = StateVariable 
+	 	 variable = sa_hard_5
+	 	 sdv_id = 67
+	 	 execute_on = timestep_end
+	 []
+	 [sa_hard_6]
+	 	  type = StateVariable 
+	 	 variable = sa_hard_6
+	 	 sdv_id = 68
+	 	 execute_on = timestep_end
+	 []
+	 [sa_hard_7]
+	 	  type = StateVariable 
+	 	 variable = sa_hard_7
+	 	 sdv_id = 69
+	 	 execute_on = timestep_end
+	 []
+	 [sa_hard_8]
+	 	  type = StateVariable 
+	 	 variable = sa_hard_8
+	 	 sdv_id = 70
+	 	 execute_on = timestep_end
+	 []
+	 [sa_hard_9]
+	 	  type = StateVariable 
+	 	 variable = sa_hard_9
+	 	 sdv_id = 71
+	 	 execute_on = timestep_end
+	 []
+	 [sa_hard_10]
+	 	  type = StateVariable 
+	 	 variable = sa_hard_10
+	 	 sdv_id = 72
+	 	 execute_on = timestep_end
+	 []
+	 [sa_hard_11]
+	 	  type = StateVariable 
+	 	 variable = sa_hard_11
+	 	 sdv_id = 73
+	 	 execute_on = timestep_end
+	 []
+	 [sa_hard_12]
+	 	  type = StateVariable 
+	 	 variable = sa_hard_12
+	 	 sdv_id = 74
+	 	 execute_on = timestep_end
+	 []
+[]
+
+
+ [Postprocessors]
+	 [sa_hard_1]
+	 	 type = ElementAverageValue
+	 	 variable = sa_hard_1
+	 []
+	 [sa_hard_2]
+	 	 type = ElementAverageValue
+	 	 variable = sa_hard_2
+	 []
+	 [sa_hard_3]
+	 	 type = ElementAverageValue
+	 	 variable = sa_hard_3
+	 []
+	 [sa_hard_4]
+	 	 type = ElementAverageValue
+	 	 variable = sa_hard_4
+	 []
+	 [sa_hard_5]
+	 	 type = ElementAverageValue
+	 	 variable = sa_hard_5
+	 []
+	 [sa_hard_6]
+	 	 type = ElementAverageValue
+	 	 variable = sa_hard_6
+	 []
+	 [sa_hard_7]
+	 	 type = ElementAverageValue
+	 	 variable = sa_hard_7
+	 []
+	 [sa_hard_8]
+	 	 type = ElementAverageValue
+	 	 variable = sa_hard_8
+	 []
+	 [sa_hard_9]
+	 	 type = ElementAverageValue
+	 	 variable = sa_hard_9
+	 []
+	 [sa_hard_10]
+	 	 type = ElementAverageValue
+	 	 variable = sa_hard_10
+	 []
+	 [sa_hard_11]
+	 	 type = ElementAverageValue
+	 	 variable = sa_hard_11
+	 []
+	 [sa_hard_12]
+	 	 type = ElementAverageValue
+	 	 variable = sa_hard_12
+	 []
+[]

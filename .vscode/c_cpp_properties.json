@@ -1,0 +1,58 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}",
+                "${workspaceFolder}/include/userobjects",
+                "${workspaceFolder}/build/header_symlinks",
+                "${workspaceFolder}/../moose/framework/build/header_symlinks",
+                "${workspaceFolder}/../moose/modules/module_loader/build/header_symlinks",
+                "${workspaceFolder}/../moose/framework/contrib/boost/include",
+                "${workspaceFolder}/../moose/framework/contrib/hit",
+                "${workspaceFolder}/../moose/framework/include",
+                "${workspaceFolder}/include/materials",
+                "${workspaceFolder}/../moose/modules/solid_mechanics/include/materials",
+                "${workspaceFolder}/../moose/framework/build/header_symlinks",
+                "${workspaceFolder}/../moose/framework/contrib/json/include",
+                "${workspaceFolder}/../moose/modules/solid_mechanics/include/materials",
+                "${workspaceFolder}/../moose/framework/contrib/mtwist/include",
+                "${workspaceFolder}/../moose/framework/contrib/hit/include/",
+                "${workspaceFolder}/../moose/framework/contrib/wasp",
+                "${workspaceFolder}/../moose/modules/solid_mechanics/build/header_symlinks",
+                "${workspaceFolder}/../moose/modules/phase_field/build/header_symlinks",
+                "~/projects/moose/modules/solid_mechanics/include/utils",
+                "~/projects/moose/modules/solid_mechanics/include/userobjects",
+                "~/projects/moose/modules/phase_field/include/utils",
+                "~/projects/moose/framework/contrib/gtest",
+                "~/miniforge3/envs/moose/libmesh/include",
+                "~/miniforge3/envs/moose/libmesh/include/metaphysicl",               
+                "~/miniforge3/envs/moose/petsc/include",
+                "~/miniforge3/envs/moose/wasp/include/"
+
+
+
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/mpicxx",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64",
+            "compileCommands": "${workspaceFolder}/compile_commands.json",
+            "browse": {
+                "path": [
+                    "${workspaceFolder}",
+                    "${workspaceFolder}/build/header_symlinks",
+                    "${workspaceFolder}/../moose/framework/build/header_symlinks",
+                    "${workspaceFolder}/../moose/modules/module_loader/build/header_symlinks",
+                    "${workspaceFolder}/../moose/framework/contrib/boost/include",
+                    "${workspaceFolder}/../moose/framework/contrib/hit",
+                    "${workspaceFolder}/../moose/framework/include",
+                    "${workspaceFolder}/../moose/framework/build/header_symlinks",
+                    "${workspaceFolder}/../moose/framework/contrib/hit/include/"
+                ]
+            }
+        }
+    ],
+    "version": 4
+}
