@@ -1,0 +1,185 @@
+#!/bin/bash
+
+# Export the path to rhocp-opt
+export RHOCPOPT=~/projects/rhocp-vr-250420/rhocp-opt
+
+# echo "Running sigmaV=30 MPa, stage 1..."
+# mpirun -n 24 $RHOCPOPT \
+#   -i bcc_pxtal.i \
+#   sigmaV=30 \
+#   Executioner/end_time=5e5 \
+#   Executioner/TimeStepper/log_dt=0.05 \
+#   Outputs/file_base=out_673K_30MPa \
+#   > log30.run
+
+# echo "Running sigmaV=30 MPa, stage 2 (recover)..."
+# mpirun -n 24 $RHOCPOPT \
+#   -i bcc_pxtal.i \
+#   sigmaV=30 \
+#   Executioner/end_time=1e7 \
+#   Executioner/TimeStepper/log_dt=0.01 \
+#   Outputs/file_base=out_673K_30MPa \
+#   --recover \
+#   > log30r1.run
+
+# echo "Running sigmaV=30 MPa, stage 3 (recover)..."
+# mpirun -n 24 $RHOCPOPT \
+#   -i bcc_pxtal.i \
+#   sigmaV=30 \
+#   Executioner/end_time=1.35e8 \
+#   Executioner/TimeStepper/log_dt=0.001 \
+#   Outputs/file_base=out_673K_30MPa \
+#   --recover \
+#   > log30r2.run
+
+
+# echo "Running sigmaV=60 MPa, stage 1..."
+# mpirun -n 24 $RHOCPOPT \
+#   -i bcc_pxtal.i \
+#   sigmaV=60 \
+#   Executioner/end_time=5e5 \
+#   Executioner/TimeStepper/log_dt=0.05 \
+#   Outputs/file_base=out_673K_60MPa \
+#   > log60.run
+
+# echo "Running sigmaV=60 MPa, stage 2 (recover)..."
+# mpirun -n 24 $RHOCPOPT \
+#   -i bcc_pxtal.i \
+#   sigmaV=60 \
+#   Executioner/end_time=1e7 \
+#   Executioner/TimeStepper/log_dt=0.01 \
+#   Outputs/file_base=out_673K_60MPa \
+#   --recover \
+#   > log60r1.run
+
+# echo "Running sigmaV=60 MPa, stage 3 (recover)..."
+# mpirun -n 24 $RHOCPOPT \
+#   -i bcc_pxtal.i \
+#   sigmaV=60 \
+#   Executioner/end_time=1.35e8 \
+#   Executioner/TimeStepper/log_dt=0.0005 \
+#   Outputs/file_base=out_673K_60MPa \
+#   --recover \
+#   > log60r2.run
+
+
+# echo "Running sigmaV=100 MPa, stage 1..."
+# mpirun -n 24 $RHOCPOPT \
+#   -i bcc_pxtal.i \
+#   sigmaV=100 \
+#   Executioner/end_time=5e5 \
+#   Executioner/TimeStepper/log_dt=0.05 \
+#   Outputs/file_base=out_673K_100MPa \
+#   > log100.run
+
+# echo "Running sigmaV=100 MPa, stage 2 (recover)..."
+# mpirun -n 24 $RHOCPOPT \
+#   -i bcc_pxtal.i \
+#   sigmaV=100 \
+#   Executioner/end_time=1e7 \
+#   Executioner/TimeStepper/log_dt=0.01 \
+#   Outputs/file_base=out_673K_100MPa \
+#   --recover \
+#   > log100r1.run
+
+# echo "Running sigmaV=100 MPa, stage 3 (recover)..."
+# mpirun -n 24 $RHOCPOPT \
+#   -i bcc_pxtal.i \
+#   sigmaV=100 \
+#   Executioner/end_time=7e7 \
+#   Executioner/TimeStepper/log_dt=0.001 \
+#   Outputs/file_base=out_673K_100MPa \
+#   --recover \
+#   > log100r1.run  
+
+# echo "Running sigmaV=100 MPa, stage 4 (recover)..."
+# mpirun -n 24 $RHOCPOPT \
+#   -i bcc_pxtal.i \
+#   sigmaV=100 \
+#   Executioner/end_time=1.35e8 \
+#   Executioner/TimeStepper/log_dt=0.0005 \
+#   Outputs/file_base=out_673K_100MPa \
+#   --recover \
+#   > log100r2.run
+
+
+# echo "Running sigmaV=140 MPa, stage 1..."
+# mpirun -n 24 $RHOCPOPT \
+#   -i bcc_pxtal.i \
+#   sigmaV=140 \
+#   Executioner/end_time=5e5 \
+#   Executioner/TimeStepper/log_dt=0.05 \
+#   Outputs/file_base=out_673K_140MPa \
+#   > log140.run
+
+# echo "Running sigmaV=140 MPa, stage 2 (recover)..."
+# mpirun -n 24 $RHOCPOPT \
+#   -i bcc_pxtal.i \
+#   sigmaV=140 \
+#   Executioner/end_time=1e7 \
+#   Executioner/TimeStepper/log_dt=0.01 \
+#   Outputs/file_base=out_673K_140MPa \
+#   --recover \
+#   > log140r1.run
+
+# echo "Running sigmaV=140 MPa, stage 3 (recover)..."
+# mpirun -n 24 $RHOCPOPT \
+#   -i bcc_pxtal.i \
+#   sigmaV=140 \
+#   Executioner/end_time=7e7 \
+#   Executioner/TimeStepper/log_dt=0.002 \
+#   Outputs/file_base=out_673K_140MPa \
+#   --recover \
+#   > log140r2.run
+
+# echo "Running sigmaV=140 MPa, stage 4 (recover)..."
+# mpirun -n 24 $RHOCPOPT \
+#   -i bcc_pxtal.i \
+#   sigmaV=140 \
+#   Executioner/end_time=1.35e8 \
+#   Executioner/TimeStepper/log_dt=0.0003 \
+#   Outputs/file_base=out_673K_140MPa \
+#   --recover \
+#   > log140r2.run
+
+
+
+# # --- sigmaV = 200 MPa ---
+# echo "Running sigmaV=200 MPa, stage 1..."
+# mpirun -n 24 $RHOCPOPT \
+#   -i bcc_pxtal.i \
+#   sigmaV=200 \
+#   Executioner/end_time=5e5 \
+#   Executioner/TimeStepper/log_dt=0.05 \
+#   Outputs/file_base=out_673K_200MPa \
+#   > log200.run
+
+# echo "Running sigmaV=200 MPa, stage 2 (recover)..."
+# mpirun -n 24 $RHOCPOPT \
+#   -i bcc_pxtal.i \
+#   sigmaV=200 \
+#   Executioner/end_time=1e7 \
+#   Executioner/TimeStepper/log_dt=0.01 \
+#   Outputs/file_base=out_673K_200MPa \
+#   --recover \
+#   > log200r1.run
+
+
+
+echo "Running sigmaV=200 MPa, stage 3 (recover)..."
+mpirun -n 24 $RHOCPOPT \
+  -i bcc_pxtal.i \
+  sigmaV=200 \
+  Executioner/end_time=1.35e8 \
+  Executioner/TimeStepper/log_dt=0.0005 \
+  Outputs/file_base=out_673K_200MPa \
+  --recover \
+  > log200r2.run
+
+# echo "Running Simulations at 603K"
+# cd /home/vikramroy/projects/rhocp-vr-250420/examples/bcc_FeCr/IrradCreep/512g/603K/
+# ./runmoose.sh
+
+# echo "Running Simulations at 473K"
+# cd /home/vikramroy/projects/rhocp-vr-250420/examples/bcc_FeCr/IrradCreep/512g/473K/
+# ./runmoose.sh
