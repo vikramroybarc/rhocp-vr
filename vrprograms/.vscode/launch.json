@@ -1,0 +1,14 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "by-gdb",
+            "request": "launch",
+            "name": "Launch(gdb)",
+            "program": "${workspaceRoot}/exportsdv",
+            "cwd": "${workspaceRoot}",
+            "programArgs": "-n 2 -pre gstrain cstrain -s 123 147 148 172 -ord F F -f sdv.i"
+        }
+
+    ]
+}

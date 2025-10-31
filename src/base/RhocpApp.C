@@ -1,0 +1,51 @@
+#include "RhocpApp.h"
+#include "Moose.h"
+#include "AppFactory.h"
+#include "ModulesApp.h"
+#include "MooseSyntax.h"
+
+InputParameters
+RhocpApp::validParams()
+{
+  InputParameters params = MooseApp::validParams();
+  params.set<bool>("use_legacy_material_output") = false;
+  params.set<bool>("use_legacy_initial_residual_evaluation_behavior") = false;
+  return params;
+}
+
+RhocpApp::RhocpApp(const InputParameters & parameters) : MooseApp(parameters)
+{
+  RhocpApp::registerAll(_factory, _action_factory, _syntax);
+}
+
+RhocpApp::~RhocpApp() {}
+
+void
+RhocpApp::registerAll(Factory & f, ActionFactory & af, Syntax & syntax)
+{
+  ModulesApp::registerAllObjects<RhocpApp>(f, af, syntax);
+  Registry::registerObjectsTo(f, {"RhocpApp"});
+  Registry::registerActionsTo(af, {"RhocpApp"});
+
+  /* register custom execute flags, action syntax, etc. here */
+}
+
+void
+RhocpApp::registerApps()
+{
+  registerApp(RhocpApp);
+}
+
+/***************************************************************************************************
+ *********************** Dynamic Library Entry Points - DO NOT MODIFY ******************************
+ **************************************************************************************************/
+extern "C" void
+RhocpApp__registerAll(Factory & f, ActionFactory & af, Syntax & s)
+{
+  RhocpApp::registerAll(f, af, s);
+}
+extern "C" void
+RhocpApp__registerApps()
+{
+  RhocpApp::registerApps();
+}
