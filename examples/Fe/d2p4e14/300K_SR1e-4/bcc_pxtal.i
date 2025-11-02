@@ -254,7 +254,7 @@
   [./dts]
     type = PiecewiseLinear
     x = '0      2e-5'
-    y = '1e-6   0.001'
+    y = '1e-6   0.01'
   [../]
 []
 
