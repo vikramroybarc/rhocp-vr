@@ -1,26 +1,26 @@
-NPROC=24
-RHOCPOPT=~/projects/rhocp-vr-250926/rhocp-opt
+NPROC=20
+RHOCPOPT=~/projects/rhocp-vr/rhocp-opt
 
-# for temp in {773..923..50}; do
-#     mpirun -n "$NPROC" $RHOCPOPT -i bcc_pxtal.i \
-#         Functions/top_pull/expression='0.4*3e-3' \
-#         Executioner/end_time=17 \
-#         Materials/CPStressUpdate/temp=$temp \
-#         Materials/CPStressUpdate/deltaH_eV=false\
-#         Materials/CPStressUpdate/propsFile=bcc_props.in \
-#         Outputs/file_base=out_${temp}K_3e-3
-# done
+for temp in {773..923..50}; do
+    mpirun -n "$NPROC" $RHOCPOPT -i bcc_pxtal.i \
+        Functions/top_pull/expression='0.4*3e-3' \
+        Executioner/end_time=17 \
+        Materials/CPStressUpdate/temp=$temp \
+        Materials/CPStressUpdate/deltaH_eV=false\
+        Materials/CPStressUpdate/propsFile=bcc_props.in \
+        Outputs/file_base=out_${temp}K_3e-3
+done
 
-# for temp in {473..673..100}; do
-#     mpirun -n "$NPROC" $RHOCPOPT -i bcc_pxtal.i \
-#         Functions/top_pull/expression='0.4*3e-3' \
-#         Executioner/end_time=17 \
-#         Materials/CPStressUpdate/temp=$temp \
-#         Materials/CPStressUpdate/deltaH_eV=true\
-#         Materials/CPStressUpdate/propsFile=bcc_props_473.in \
-#         Functions/dts/y='0.0001    0.02' \
-#         Outputs/file_base=out_${temp}K_3e-3
-# done
+for temp in {473..673..100}; do
+    mpirun -n "$NPROC" $RHOCPOPT -i bcc_pxtal.i \
+        Functions/top_pull/expression='0.4*3e-3' \
+        Executioner/end_time=17 \
+        Materials/CPStressUpdate/temp=$temp \
+        Materials/CPStressUpdate/deltaH_eV=true\
+        Materials/CPStressUpdate/propsFile=bcc_props_473.in \
+        Functions/dts/y='0.0001    0.02' \
+        Outputs/file_base=out_${temp}K_3e-3
+done
 
 
 for temp in {673..923..50}; do

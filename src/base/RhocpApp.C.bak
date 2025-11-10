@@ -1,18 +1,19 @@
+// Default App.C of RhoCp
+
 #include "RhocpApp.h"
 #include "Moose.h"
-#include "Factory.h"
 #include "AppFactory.h"
-#include "MooseSyntax.h"
 #include "ModulesApp.h"
+#include "MooseSyntax.h"
 
 InputParameters
 RhocpApp::validParams()
 {
   InputParameters params = MooseApp::validParams();
+  params.set<bool>("use_legacy_material_output") = false;
+  params.set<bool>("use_legacy_initial_residual_evaluation_behavior") = false;
   return params;
 }
-
-registerKnownLabel("RhocpApp");
 
 RhocpApp::RhocpApp(const InputParameters & parameters) : MooseApp(parameters)
 {
@@ -22,9 +23,9 @@ RhocpApp::RhocpApp(const InputParameters & parameters) : MooseApp(parameters)
 RhocpApp::~RhocpApp() {}
 
 void
-RhocpApp::registerAll(Factory & f, ActionFactory & af, Syntax & s)
+RhocpApp::registerAll(Factory & f, ActionFactory & af, Syntax & syntax)
 {
-  ModulesApp::registerAllObjects<RhocpApp>(f, af, s);
+  ModulesApp::registerAllObjects<RhocpApp>(f, af, syntax);
   Registry::registerObjectsTo(f, {"RhocpApp"});
   Registry::registerActionsTo(af, {"RhocpApp"});
 
@@ -35,26 +36,6 @@ void
 RhocpApp::registerApps()
 {
   registerApp(RhocpApp);
-}
-
-void
-RhocpApp::registerObjects(Factory & factory)
-{
-  mooseDeprecated("use registerAll instead of registerObjects");
-  Registry::registerObjectsTo(factory, {"RhocpApp"});
-}
-
-void
-RhocpApp::registerExecFlags(Factory & /*factory*/)
-{
-  mooseDeprecated("use registerAll instead of registerExecFlags");
-}
-
-void
-RhocpApp::associateSyntax(Syntax & syntax, ActionFactory & action_factory)
-{
-  mooseDeprecated("use registerAll instead of associateSyntax");
-  Registry::registerActionsTo(action_factory, {"RhocpApp"});
 }
 
 /***************************************************************************************************
