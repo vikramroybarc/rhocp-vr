@@ -4,3 +4,4 @@ rm -rf -- **/out*_cp
 rm -rf -- **/log*
 rm -rf lib/
 rm -rf test/lib
+rm -rf src/.libs

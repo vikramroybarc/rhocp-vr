@@ -75,6 +75,9 @@ protected:
   // Name of the Phase Field Variable
   const VariableName _d_name;
 
+  /// Decomposition types
+  const enum class Decomposition {none, spectral, voldev} _decomposition;
+
   // @ {Strain Energy and its Derivatives with respect to damage
   const MaterialPropertyName _psie_name;
   ADMaterialProperty<Real> & _psie;
@@ -91,11 +94,21 @@ protected:
   // }
 
 
-  // @ {degradation function and its derivatives with respect to damage
-  const MaterialPropertyName _g_name;
-  const ADMaterialProperty<Real> & _g;
-  const ADMaterialProperty<Real> & _dg_dd;
+  // @ {degradation function of elastic energy and its derivatives with respect to damage
+  const MaterialPropertyName _ge_name;
+  const ADMaterialProperty<Real> & _ge;
+  const ADMaterialProperty<Real> & _dge_dd;
   // }
+
+    // @ {degradation function of plastic energy and its derivatives with respect to damage
+  const MaterialPropertyName _gp_name;
+  const ADMaterialProperty<Real> & _gp;
+  const ADMaterialProperty<Real> & _dgp_dd;
+  // }
+
+  // @{ Plastic Heat Generation
+  const ADMaterialProperty<Real> & _heat;
+  //}
 
 
 
@@ -217,7 +230,35 @@ protected:
     std::vector<Real> &Nloop,
     std::vector<Real> &dloop,
     std::vector<std::vector<Real>> H,
-    std::vector<Real> &d_disl);      
+    std::vector<Real> &d_disl);
+
+    
+    
+  // Function for Calculation of Cauchy Stress
+  RankTwoTensor computeCauchyStress(
+    const RankTwoTensor E_el,
+    const RankTwoTensor F_el,
+    Real C[3][3][3][3], 
+    const bool converged
+  );
+
+  // Function for Calculation of Cauchy Stress No Decomposition
+  RankTwoTensor computeCauchyStressNoDecomposition(
+    const RankTwoTensor E_el,
+    const RankTwoTensor F_el,
+    Real C[3][3][3][3], 
+    const bool converged
+  );
+
+
+  // Function for Calculation of Cauchy VolDev Spectral Decomposition
+  RankTwoTensor computeCauchyStressVolDevDecomposition(
+    const RankTwoTensor E_el,
+    const RankTwoTensor F_el,
+    Real C[3][3][3][3], 
+    const bool converged
+  );
+
 
   Real tolerance;
 
