@@ -311,17 +311,18 @@
     EulerAngFileReader = euler_angle
     deltaH_eV = false
     phase_field = d
-    degradation_function = g
+    g = g
     decomposition = NONE  
   [../]
   [./elasticity_tensor]
     type = ComputeCPElasticityTensor
   [../]
-  [degradation]
+  [g]
   type = NoDegradation
-  phase_field = d
   property_name = g
-  []    
+  phase_field = d
+  [../]
+    
 []
 
 [Preconditioning]

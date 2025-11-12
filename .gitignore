@@ -66,6 +66,10 @@ traceout*.txt
 *.vtu
 .depend
 *.run
+.jitcache*
+*.so.*
+build/*
+out*
 
 
 # But allow specific file pattern in examples/bcc_FeCr/*

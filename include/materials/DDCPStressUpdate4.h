@@ -1,10 +1,12 @@
+#pragma once
 #include "ComputeStressBase.h"
 #include "EulerAngleReader.h"
 #include "EBSDMeshReader.h"
 #include "GrainAreaSize.h"
-//#include "IntMatFileReader.h"
+// #include "DerivativeMaterialPropertyNameInterface.h"
 
 class DDCPStressUpdate4 : public ComputeStressBase
+                          // public DerivativeMaterialPropertyNameInterface  
 {
 public:
   static InputParameters validParams();

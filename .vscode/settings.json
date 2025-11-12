@@ -125,7 +125,17 @@
         "DDCPStressUpdate copy.C": "cpp",
         "DDCPStressUpdate2.C": "cpp",
         "DDCPStressUpdate3.C": "cpp",
-        "DDCPStressUpdate3 copy.C": "cpp"
+        "DDCPStressUpdate3 copy.C": "cpp",
+        "DDCPStressUpdate4.C": "cpp",
+        "BaseNameInterface.C": "cpp",
+        "DerivativeMaterialPropertyNameInterface.C": "cpp",
+        "CrackGeometricFunction.C": "cpp",
+        "CustomParsedFunctionBase.C": "cpp",
+        "DegradationFunctionBase.C": "cpp",
+        "NoDegradation.C": "cpp",
+        "PowerDegradationFunction.C": "cpp",
+        "RationalDegradationFunction.C": "cpp",
+        "RhocpApp.C": "cpp"
     },
     "C_Cpp.errorSquiggles": "enabled",
     "[moose]": {

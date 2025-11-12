@@ -25,10 +25,10 @@
                 "~/projects/moose/modules/solid_mechanics/include/userobjects",
                 "~/projects/moose/modules/phase_field/include/utils",
                 "~/projects/moose/framework/contrib/gtest",
-                "~/miniforge3/envs/moose/libmesh/include",
-                "~/miniforge3/envs/moose/libmesh/include/metaphysicl",               
-                "~/miniforge3/envs/moose/petsc/include",
-                "~/miniforge3/envs/moose/wasp/include/"
+                "~/miniforge/envs/moose/libmesh/include",
+                "~/miniforge/envs/moose/libmesh/include/metaphysicl",               
+                "~/miniforge/envs/moose/petsc/include",
+                "~/miniforge/envs/moose/wasp/include/"
 
 
 
