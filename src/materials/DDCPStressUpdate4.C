@@ -40,10 +40,7 @@ DDCPStressUpdate4::validParams()
   params.addParam<bool>("deltaH_eV", false, "deltaH in Props file given in eV instead of multiplier.");
   params.addRequiredCoupledVar("phase_field","Name of the phase-field (damage variable)");
   params.addParam<MooseEnum>("decomposition" , MooseEnum("NONE SPECTRAL VOLDEV", "NONE"), "The decomposition method");  
-  params.addParam<MaterialPropertyName>("strain_energy_density", "psie", "Name of the strain energy density computed by this material model");
-  params.addParam<MaterialPropertyName>("plastic_energy_density", "psip", "Name of the plastic energy density computed by this material model");
-  params.addParam<MaterialPropertyName>("elastic_degradation_function", "ge", "The Elastic Energy degradation function");
-  params.addParam<MaterialPropertyName>("plastic_degradation_function", "gp", "The Plastic Energy degradation function");
+  params.addParam<MaterialPropertyName>("degradation_function", "g", "The degradation function");
   return params;
 }
 
@@ -90,25 +87,19 @@ DDCPStressUpdate4::DDCPStressUpdate4(const InputParameters & parameters) :
     _rotation_increment(getMaterialPropertyByName<RankTwoTensor>(_base_name + "rotation_increment")),
     _stress_old(getMaterialPropertyOld<RankTwoTensor>(_base_name + "stress")),
     _Cel_cp(declareProperty<RankFourTensor>("Cel_cp")),
-    _d_name(getVar("phase_field", 0)->name()),
+    _d_name(coupledName("phase_field", 0)),
     _decomposition(getParam<MooseEnum>("decomposition").getEnum<Decomposition>()),
-    // Strain Energy Density and its derivatives
-    _psie_name("strain_energy_density", true),
+    _psie_name("strain_energy_density"),
     _psie(declareADProperty<Real>(_psie_name)),
     _psie_active(declareADProperty<Real>(_psie_name + "_active")),
     _dpsie_dd(declareADProperty<Real>(derivativePropertyName(_psie_name, {_d_name}))),
-    _psip_name("plastic_energy_density", true),
+    _psip_name("plastic_energy_density"),
     _psip(declareADProperty<Real>(_psip_name)),
     _psip_active(declareADProperty<Real>(_psip_name + "_active")),
     _dpsip_dd(declareADProperty<Real>(derivativePropertyName(_psip_name, {_d_name}))),
-    // Degradation Function and its derivatives
-    _ge_name("elastic_degradation_function", true),
-    _ge(getADMaterialProperty<Real>(_ge_name)),
-    _dge_dd(getADMaterialProperty<Real>(derivativePropertyName(_ge_name, {_d_name}))),
-    _gp_name("plastic_degradation_function", true),
-    _gp(getADMaterialProperty<Real>(_gp_name)),
-    _dgp_dd(getADMaterialProperty<Real>(derivativePropertyName(_gp_name, {_d_name}))),
-    // Plastic Heat Generation
+    _g_name("degradation_function"),
+    _g(getADMaterialProperty<Real>(_g_name)),
+    _dg_dd(declareADProperty<Real>(derivativePropertyName(_g_name, {_d_name}))), //todo check if works correctly
     _heat(declareADProperty<Real>("plastic_heat_generation"))
 {
   for (auto i : make_range(_eigenstrain_names.size())) {
@@ -393,6 +384,10 @@ void DDCPStressUpdate4::computeQpStress()
     // Initialize E_p_eff_cum
     E_p_eff_cum = 0;
 
+    // Initialize Active Work densities
+    _psie_active[_qp] = 0;
+    _psip_active[_qp] = 0;
+
     // Initialize average values of defect densities and the corresponding loop sizes
     rho_m_avg0 = rho_m_zero;
     rho_i_avg0 = rho_i_zero;
@@ -489,32 +484,38 @@ void DDCPStressUpdate4::computeQpStress()
     n = n + 1;
     // gamma_dot_g_avg0 = _state_var[_qp][n];
 
-    // Read mobile dislocation density values SDV 50 + _num_slip_sys
+    // Read older work densities SDV51 & 52
+    n = n+1;
+    // _psie_active[_qp] = _state_var[_qp][n];
+    n = n+1;
+    // _psip_active[_qp] = _state_var[_qp][n];
+
+    // Read mobile dislocation density values SDV 52 + _num_slip_sys
     for (unsigned int i = 0; i < _num_slip_sys; i++) {
       n = n + 1;
       rho_m0[i] = _state_var[_qp][n];
     }
 
-    // Read immobile dislocation density values SDV 50 + _num_slip_sys*2
+    // Read immobile dislocation density values SDV 52 + _num_slip_sys*2
     for (unsigned int i = 0; i < _num_slip_sys; i++) {
       n = n + 1;
       rho_i0[i] = _state_var[_qp][n];
     }
 
-    // Read back stress values SDV 50 + _num_slip_sys*3
+    // Read back stress values SDV 52 + _num_slip_sys*3
     for (unsigned int i = 0; i < _num_slip_sys; i++) {
       n = n + 1;
       bstress0[i] = _state_var[_qp][n];
     }
 
-    // Read Dislocation Loop Densities from SDV 50 + _num_slip_sys*4
+    // Read Dislocation Loop Densities from SDV 52 + _num_slip_sys*4
     if(_irad_defects){
       for (unsigned int i = 0; i < _num_slip_sys; i++) {
         n = n + 1;
         Nloop0[i] = _state_var[_qp][n];
       }
 
-    //  Read Dislocation Loop Densities from SDV 50 + _num_slip_sys*5
+    //  Read Dislocation Loop Densities from SDV 52 + _num_slip_sys*5
     for (unsigned int i = 0; i < _num_slip_sys; i++) {
         n = n + 1;
         dloop0[i] = _state_var[_qp][n];
@@ -1196,53 +1197,13 @@ void DDCPStressUpdate4::computeQpStress()
   if(_climbmodel){
 
 
-      // Calculate drhomdgc
-      // for (unsigned int ia = 0; ia < _num_slip_sys; ia++ ) {
-      //   Real sum1 = 0.0;
-      //   Real sum2 = 0.0;
-      //   Real sum3 = 0.0;
-      //   for (unsigned int ib = 0; ib < _num_slip_sys; ib++) {
-      //     sum1 = sum1 + H[ia][ib]*(rho_m[ib] + rho_i[ib]);
-      //     sum2 = sum2 + H[ia][ib]*(rho_m[ib]);
-      //     sum3 = sum3 + H[ia][ib]*(rho_i[ib]);
-      //   }
-      //   d_disl2[ia] = pow( (sqrt(sum2)), -1); // Mean Free Path
-      //   d_disl3[ia] = 1/sqrt(sum3);
-      //   Real d_disl {1/sqrt(sum1)};
-      //   Real t1 {k_M*d_disl/2/b_mag};
-      //   Real t2_0 {pow(rho_m[ia], -0.5)/(2* b_mag)};
-      //   Real t2 = t1*(t2_0)*abs(gamma_dot_c[ia])*dt_incr;
-      //   Real t3 = d_disl2[ia]/(2*b_mag)*abs(gamma_dot_c[ia])*dt_incr;
-
-      //   Real t4 = k_M/b_mag/d_disl;
-      //   Real t5 = 1/b_mag/d_disl2[ia];
-      //   Real t6 = k_D2*rho_i[ia];
-
-      //   temp12[ia][ia] = temp12[ia][ia] + (t4 - t5 + t1*(t5 - t6))*(sgn(gamma_dot_c[ia]) * dt_incr);
-
-      //   temp11[ia][ia] = temp11[ia][ia] + 1 - t1 - t2  + t3;                   
-
-      // }
-
-
-
-    // MatrixTools::inverse(temp11, temp11_inv);
 
     for (unsigned int ia = 0; ia <_num_slip_sys; ia++) {
-      // for (unsigned int ib = 0; ib < _num_slip_sys; ib++ ) {
-      //   drhomdgc[ia][ib] = 0.0;
-      //   for(unsigned int ic = 0; ic < _num_slip_sys; ic++) {
           drhomdgc[ia][ia] = -k_c*rho_m[ia]*sgn(gamma_dot_c[ia])*dt_incr;
-      //  }
-     // }
     }
 
     // drhoidgc 
     for (unsigned int ia = 0; ia < _num_slip_sys; ia++){
-      // for(unsigned int ib = 0; ib < _num_slip_sys; ib++){
-      //   Real t1 = k_c*drhomdgc[ia][ib]*abs(gamma_dot_c[ia]);
-      //   drhoidgc[ia][ib] = t1*dt_incr;
-      // }
       drhoidgc[ia][ia] = drhoidgc[ia][ia] + (- k_D*rho_i[ia])*sgn(gamma_dot_c[ia])*dt_incr;
     }
     
@@ -1266,16 +1227,6 @@ void DDCPStressUpdate4::computeQpStress()
       }
     }
 
-    //dldgc
-    
-    // for (unsigned int ia = 0; ia < _num_slip_sys; ia++) {
-    //   Real x1 = pow(d_disl2[ia], 2);
-    //   Real x2 = pow(rho_m[ia], -0.5);
-    //   Real x3 = -0.5*x1*x2;      
-    //   for (unsigned int ib = 0; ib < _num_slip_sys; ib++) {     
-    //   dldgc[ia][ib] = x3*drhomdgc[ia][ib] ;
-    //   }
-    // }
   } // end if (climbmodel)   
 
 
@@ -1304,6 +1255,7 @@ void DDCPStressUpdate4::computeQpStress()
      
       if(_sliplaw == 2) {  // * For a Slip Model which contains both athermal term s-a & thermal term s-t
         for(unsigned int ib = 0; ib < _num_slip_sys; ib++) {
+          //  tau_eff[ib] = tau_eff[ib]/MetaPhysicL::raw_value(_g[_qp]);
           array3[ia][ib] = -gamma_dot_g[ia]*(p*q*(delF0/B_k/_temp[_qp])*power(1.e0 - power((abs(tau_eff[ia])
               - s_a[ia])/s_t[ia], p), q - 1)*power((abs(tau_eff[ia]) - s_a[ia])/s_t[ia], p - 1))*
             (((dTaudGd[ia][ib] - dbsdgb[ia][ib])*sgn(tau_eff[ia]) - dsadgb[ia][ib])/s_t[ia] - (abs(tau_eff[ia]) - s_a[ia])*dstdgb[ia][ib]/(s_t[ia]*s_t[ia]));
@@ -1314,6 +1266,7 @@ void DDCPStressUpdate4::computeQpStress()
 
       // *  For Viscoplastic Slip Model Containing only s-a term 
         for(unsigned int ib = 0; ib < _num_slip_sys; ib++){
+          // tau_eff[ib] = tau_eff[ib]/MetaPhysicL::raw_value(_g[_qp]);
           Real x1 = -delF0/(B_k*_temp[_qp]);
           Real x2 = abs(tau_eff[ia])/s_a[ia];
           if (x2 == 0) { x2 = 1e-18;}
@@ -1763,31 +1716,6 @@ void DDCPStressUpdate4::computeQpStress()
 
   Voigt_to_forth(array4_inv,array6);
 
-  //   // Method 3: inverse of 4th order symmetric tensor
-  //   // Need to take the inverse of Array4.  Since it relates two 2nd rank tensors that are both symmetric, Array4 can be xformed to Voigt notation style in order to do the inverse, then xformed back.
-  //   RankFourTensor array6RFT, array6RFTinv;
-  //
-  //   for (unsigned int i = 0; i < 3; i++) {
-  //       for (unsigned int j = 0; j < 3; j++) {
-  //           for (unsigned int k = 0; k < 3; k++) {
-  //               for (unsigned int l = 0; l < 3; l++) {
-  //                   array6RFT(i,j,k,l) = array6[i][j][k][l];
-  //               }
-  //           }
-  //       }
-  //   }
-  //
-  //   array6RFTinv = array6RFT.invSymm();
-  //
-  //   for (unsigned int i = 0; i < 3; i++) {
-  //       for (unsigned int j = 0; j < 3; j++) {
-  //           for (unsigned int k = 0; k < 3; k++) {
-  //               for (unsigned int l = 0; l < 3; l++) {
-  //                   array6[i][j][k][l] = array6RFTinv(i,j,k,l);
-  //               }
-  //           }
-  //       }
-  //   }
 
   //  Multiply Array6 by C, the elastic stiffness matrix to finally get the Jacobian, but as a 4th rank tensor.
   aaaa_dot_dot_bbbb (array6,C_avg,ddsdde_4th);
@@ -1802,7 +1730,9 @@ void DDCPStressUpdate4::computeQpStress()
     }
   }
 
-  _stress[_qp] = sig;
+  // _stress[_qp] = sig;
+  // todo Check and Compare results with sig and check the calculations of elastic energies
+  _stress[_qp] = computeCauchyStress(E_el, F_el, C, converged); 
 
   _euler_ang[_qp](0) = psi[0];
   _euler_ang[_qp](1) = psi[1];
@@ -1915,59 +1845,74 @@ void DDCPStressUpdate4::computeQpStress()
   n = n + 1;
   _state_var[_qp][n] = gamma_dot_avg;
 
+   // Store Plastic work density SDV 51 & 52
+  // todo Read _psip_active above as a state variable
+  for (unsigned int i = 0; i < _num_slip_sys ; i++) {
+    _psip_active[_qp] = _psip_active[_qp] + s_a[i] * gamma_dot_g[i] * _dt;    
+  }
+  n = n+1; //SDV51
+  _state_var[_qp][n] = MetaPhysicL::raw_value(_psie_active[_qp]);
 
-  // Read mobile dislocation density values SDV 50 + _num_slip_sys
+  n = n+1; //SDV52
+  _state_var[_qp][n] = MetaPhysicL::raw_value(_psip_active[_qp]);
+  _psip[_qp] = _psip_active[_qp]*_g[_qp];
+  _dpsip_dd[_qp] = _dg_dd[_qp] * _psip[_qp];
+
+
+  // Read mobile dislocation density values SDV 52 + _num_slip_sys
   for (unsigned int i = 0; i < _num_slip_sys; i++) {
     n = n + 1;
     _state_var[_qp][n] = rho_m[i];
   }
 
-  // Read immobile dislocation density values SDV 50 + _num_slip_sys*2
+  // Read immobile dislocation density values SDV 52 + _num_slip_sys*2
   for (unsigned int i = 0; i < _num_slip_sys; i++) {
     n = n + 1;
     _state_var[_qp][n] = rho_i[i];
   }
 
-  // Read backstress values SDV 50 + _num_slip_sys*3
+  // Read backstress values SDV 52 + _num_slip_sys*3
   for (unsigned int i = 0; i < _num_slip_sys; i++) {
     n = n + 1;
     _state_var[_qp][n] = bstress[i];
   }
 
   if(_irad_defects) {
-    // Store Nloop values SDV 50 + _num_slip_sys*4
+    // Store Nloop values SDV 52 + _num_slip_sys*4
     for (unsigned int i = 0; i < _num_slip_sys; i++) {
       n = n + 1;
       _state_var[_qp][n] = Nloop[i];
     }
 
-    // Store dloop values SDV 50 + _num_slip_sys*5
+    // Store dloop values SDV 52 + _num_slip_sys*5
     for (unsigned int i = 0; i < _num_slip_sys; i++) {
       n = n + 1;
       _state_var[_qp][n] = dloop[i];
     }
   }
+
+ 
   
 
 
-  // Read Dislocation Glide Rate SDV50 + _num_slip_sys*6
+  // Read Dislocation Glide Rate SDV52 + _num_slip_sys*6
   for(unsigned int i = 0; i < _num_slip_sys; i++) {
     n = n+1;
     _state_var[_qp][n] = gamma_dot[i];
   }
 
   if(_climbmodel){
-    // Read Dislocation Climb Rates SDV50 + _num_slip_sys*7
+    // Read Dislocation Climb Rates SDV52 + _num_slip_sys*7
     for(unsigned int i = 0; i < _num_slip_sys; i++) {
       n = n+1;
       _state_var[_qp][n] = gamma_dot_c[i];
     } 
 
-    // Store average climb rates SDV50 + _num_slip_sys*7 + 1
+    // Store average climb rates SDV52 + _num_slip_sys*7 + 1
     n = n+1;
     _state_var[_qp][n] = gamma_dot_climb_avg;
 
-    // Store Effect of Climb rates SDV50 + _num_slip_sys*7 + 3
+    // Store Effect of Climb rates SDV52 + _num_slip_sys*7 + 3
     n = n+1;
     _state_var[_qp][n] = climbfrac1;
 
@@ -2177,28 +2122,31 @@ void DDCPStressUpdate4::NR_residual (
   E_el(2,2) = E_el(2,2) - 1.0;
   E_el = 0.5 * E_el;
 
-  // Multiply the stiffness tensor by the Green strain to get the 2nd Piola Kirkhhoff stress
-  Real E_el_matrix[3][3], Spk2_matrix[3][3];
-  for (unsigned int i = 0; i < 3; i++) {
-    for (unsigned int j = 0; j < 3; j++) {
-      E_el_matrix[i][j] = E_el(i,j);
-    }
-  }
-  aaaa_dot_dot_bb(C,E_el_matrix,Spk2_matrix);
-  for (unsigned int i = 0; i < 3; i++) {
-    for (unsigned int j = 0; j < 3; j++) {
-      Spk2(i,j) = Spk2_matrix[i][j];
-    }
-  }
+  // // Multiply the stiffness tensor by the Green strain to get the 2nd Piola Kirkhhoff stress
+  // Real E_el_matrix[3][3], Spk2_matrix[3][3];
+  // for (unsigned int i = 0; i < 3; i++) {
+  //   for (unsigned int j = 0; j < 3; j++) {
+  //     E_el_matrix[i][j] = E_el(i,j);
+  //   }
+  // }
+  // aaaa_dot_dot_bb(C,E_el_matrix,Spk2_matrix);
+  // for (unsigned int i = 0; i < 3; i++) {
+  //   for (unsigned int j = 0; j < 3; j++) {
+  //     Spk2(i,j) = Spk2_matrix[i][j];
+  //   }
+  // }
 
-  // Convert from PK2 stress to Cauchy stress
-  Real det = F_el.det();
-  sig =  F_el * Spk2 * F_el.transpose();
-  for (unsigned int i = 0; i < 3; i++) {
-    for (unsigned int j = 0; j < 3; j++) {
-      sig(i,j) = sig(i,j)/det;
-    }
-  }
+  // // Convert from PK2 stress to Cauchy stress
+  // Real det = F_el.det();
+  // sig =  F_el * Spk2 * F_el.transpose();
+  // for (unsigned int i = 0; i < 3; i++) {
+  //   for (unsigned int j = 0; j < 3; j++) {
+  //     sig(i,j) = sig(i,j)/det;
+  //   }
+  // }
+  sig = computeCauchyStress(E_el, F_el, C, 
+                                          /*converged*/
+                                        false);
 
   // Calculate resolved shear stress for each slip system.
   for(unsigned int k = 0; k < num_slip_sys; k++) {
@@ -2899,7 +2847,7 @@ void DDCPStressUpdate4::calc_crss(
           Real refgdg = gammadot0g;
           if(abs(tau_eff[k]) > s_a[k]) {
             // Change tau_eff to take care of degradation Ref. Hu et al 2021, Torres et al 2025
-            tau_eff[k] = tau_eff[k]/MetaPhysicL::raw_value(_gp[_qp]);
+            // tau_eff[k] = tau_eff[k]/MetaPhysicL::raw_value(_g[_qp]);
             gamma_dot_g[k] = refgdg*exp((-delF0/B_k/_temp[_qp])*power(1 - power((abs(tau_eff[k]) - s_a[k])/s_t[k], p), q))*sgn(tau_eff[k]);
           }
           else {
@@ -2912,6 +2860,8 @@ void DDCPStressUpdate4::calc_crss(
         else if (_sliplaw == 1) { // * Viscoplastic Slip Law
 
           for(unsigned int k = 0; k < _num_slip_sys; k++) {
+            // Change tau_eff to take care of degradation Ref. Hu et al 2021, Torres et al 2025
+            // tau_eff[k] = tau_eff[k]/MetaPhysicL::raw_value(_g[_qp]);
             Real refgdg = gammadot0g;
             Real x1 = delF0/(B_k*_temp[_qp]);
             Real x2 = abs(tau_eff[k])/s_a[k];
@@ -3096,14 +3046,14 @@ void DDCPStressUpdate4::calc_crss(
 
 
 
-    cauchyStress = MetaPhysicL::raw_value(_ge[_qp]) * cauchyStress_intact;
+    cauchyStress = MetaPhysicL::raw_value(_g[_qp]) * cauchyStress_intact;
 
 
     // IF called after the convergence then provide the strain energy density
     if(converged){
       _psie_active[_qp] = 0.5*cauchyStress_intact.doubleContraction(E_el);
-      _psie[_qp] = _ge[_qp] *  _psie_active[_qp];
-      _dpsie_dd[_qp] = _dge_dd[_qp] * _psie_active[_qp];
+      _psie[_qp] = _g[_qp] *  _psie_active[_qp];
+      _dpsie_dd[_qp] = _dg_dd[_qp] * _psie_active[_qp];
     }
 
 
@@ -3199,13 +3149,13 @@ void DDCPStressUpdate4::calc_crss(
 
     cauchyStress_intact = sig_active + sig_inactive;
 
-    cauchyStress = MetaPhysicL::raw_value(_ge[_qp]) * sig_active + sig_inactive;
+    cauchyStress = MetaPhysicL::raw_value(_g[_qp]) * sig_active + sig_inactive;
     
     if(converged){
       Real psie_inactive = 0.5*sig_inactive.doubleContraction(E_el_inactive);
       _psie_active[_qp] = 0.5*cauchyStress_intact.doubleContraction(E_el) - psie_inactive;
-      _psie[_qp] = _ge[_qp] * _psie_active[_qp] + psie_inactive;
-      _dpsie_dd[_qp] = _dge_dd[_qp] * _psie_active[_qp];
+      _psie[_qp] = _g[_qp] * _psie_active[_qp] + psie_inactive;
+      _dpsie_dd[_qp] = _dg_dd[_qp] * _psie_active[_qp];
     }
 
     return cauchyStress;
