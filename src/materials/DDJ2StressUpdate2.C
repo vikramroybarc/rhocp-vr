@@ -25,27 +25,18 @@ DDJ2StressUpdate2::validParams()
   params.addParam<UserObjectName>("EulerAngFileReader", "Name of the EulerAngleReader UO");
   params.addParam<int>("isEulerRadian", 0, "Are Euler angles specified in radians");
   params.addParam<int>("isEulerBunge", 0, "Are Euler angles specified in Bunge notation");  
-  params.addParam<std::vector<MaterialPropertyName>>(
-      "eigenstrain_names", {}, "List of eigenstrains to be applied in this strain calculation");
-  params.addParam<bool>("irad_defects", false, "Are Irradiation Defects present in calculations ?");
-  params.addParam<bool>("deltaH_eV", false, "deltaH in Props file given in eV instead of multiplier.");
-  params.addRequiredCoupledVar("phase_field","Name of the phase-field (damage variable)");
-  params.addParam<MaterialPropertyName>("elastic_strain_energy", "psie", "elastic strain energy density function");
-  params.addParam<MaterialPropertyName>("plastic_strain_energy", "psip", "plastic strain energy density function");
-  params.addParam<MooseEnum>("decomposition" , MooseEnum("NONE SPECTRAL VOLDEV", "NONE"), "The decomposition method");  
-  params.addParam<MaterialPropertyName>("degradation_function", "g", "The degradation function");
   return params;
 }
 
 DDJ2StressUpdate2::DDJ2StressUpdate2(const InputParameters & parameters) :
     ComputeStressBase(parameters),
     _propsFile(getParam<FileName>("propsFile")),
-    _slipSysFile(getParam<FileName>("slipSysFile")),    
+    _slipSysFile(getParam<FileName>("slipSysFile")),
     _num_props(getParam<unsigned int>("num_props")),
-    _num_slip_sys(getParam<unsigned int>("num_slip_sys")),    
-    _num_state_vars(getParam<unsigned int>("num_state_vars")),
+    _num_slip_sys(getParam<unsigned int>("num_slip_sys")),
+    _num_state_vars(getParam<unsigned int>("num_state_vars")), 
     _tol(getParam<Real>("tol")),
-    _temp(coupledValue("temp")),
+    _temp(coupledValue("temp")),   
     _EulerAngFileReader(isParamValid("EulerAngFileReader")
                                ? &getUserObject<EulerAngleReader>("EulerAngFileReader")
                                : NULL),    
@@ -53,13 +44,8 @@ DDJ2StressUpdate2::DDJ2StressUpdate2(const InputParameters & parameters) :
                                ? &getUserObject<GrainAreaSize>("GrainAreaSize")
                                : NULL),
     _isEulerRadian(getParam<int>("isEulerRadian")),
-    _isEulerBunge(getParam<int>("isEulerBunge")),
-    _irad_defects(getParam<bool>("irad_defects")),
-    _deltaH_eV(getParam<bool>("deltaH_eV")),  
-    _euler_ang(declareProperty<Point>("euler_ang")),
-    _eigenstrain_names(getParam<std::vector<MaterialPropertyName>>("eigenstrain_names")),
-    _eigenstrains(_eigenstrain_names.size()),
-    _eigenstrains_old(_eigenstrain_names.size()),                                         
+    _isEulerBunge(getParam<int>("isEulerBunge")),     
+    _euler_ang(declareProperty<Point>("euler_ang")),                              
     _state_var(declareProperty<std::vector<Real> >("state_var")),
     _state_var_old(getMaterialPropertyOld<std::vector<Real> >("state_var")),
     _properties(declareProperty<std::vector<Real> >("properties")),
@@ -73,26 +59,8 @@ DDJ2StressUpdate2::DDJ2StressUpdate2(const InputParameters & parameters) :
     _strain_increment(getMaterialPropertyByName<RankTwoTensor>(_base_name + "strain_increment")),
     _rotation_increment(getMaterialPropertyByName<RankTwoTensor>(_base_name + "rotation_increment")),
     _stress_old(getMaterialPropertyOld<RankTwoTensor>(_base_name + "stress")),
-    _Cel_cp(declareProperty<RankFourTensor>("Cel_cp")),
-    _d_name(coupledName("phase_field", 0)),
-    _decomposition(getParam<MooseEnum>("decomposition").getEnum<Decomposition>()),
-    _psie_name(_base_name + getParam<MaterialPropertyName>("elastic_strain_energy")),
-    _psie(declareADProperty<Real>(_psie_name)),
-    _psie_active(declareADProperty<Real>(_psie_name + "_active")),
-    _dpsie_dd(declareADProperty<Real>(derivativePropertyName(_psie_name, {_d_name}))),
-    _psip_name(_base_name + getParam<MaterialPropertyName>("plastic_strain_energy")),
-    _psip(declareADProperty<Real>(_psip_name)),
-    _psip_active(declareADProperty<Real>(_psip_name + "_active")),
-    _dpsip_dd(declareADProperty<Real>(derivativePropertyName(_psip_name, {_d_name}))),
-    _g_name(_base_name +  getParam<MaterialPropertyName>("degradation_function")),
-    _g(getADMaterialProperty<Real>(_g_name)),
-    _dg_dd(getADMaterialProperty<Real>(derivativePropertyName(_g_name, {_d_name}))), 
-    _heat(declareADProperty<Real>("plastic_heat_generation"))
+    _Cel_cp(declareProperty<RankFourTensor>("Cel_cp"))
 {
-  for (auto i : make_range(_eigenstrain_names.size())) {
-    _eigenstrains[i] = &getMaterialProperty<RankTwoTensor>(_eigenstrain_names[i]);
-    _eigenstrains_old[i] = &getMaterialPropertyOld<RankTwoTensor>(_eigenstrain_names[i]);
-  }  
 }
 
 DDJ2StressUpdate2::~DDJ2StressUpdate2()
@@ -136,11 +104,11 @@ void DDJ2StressUpdate2::computeQpStress()
   Real rho_m_avg0, rho_m_avg;
   Real rho_i_avg0, rho_i_avg;
   Real sig_vm, sig_vm_star;
-  Real dir_cos[3][3]; // Rotation matrix
-  Real dir_cos0[3][3]; // Rotation matrix at the beginning of simulation
+
   Real C0[3][3][3][3]; // Elastic stiffness tensor
   Real C[3][3][3][3];
   Real C_avg[3][3][3][3];
+  Real dir_cos0[3][3];
 
   RankTwoTensor sig_avg;
   RankTwoTensor sig;
@@ -153,9 +121,7 @@ void DDJ2StressUpdate2::computeQpStress()
 
   // slip system dependent arrays
   std::vector<std::vector<Real>> xs0(3, std::vector<Real>(_num_slip_sys)); // intermediate config slip directions in global coords
-  std::vector<std::vector<Real>> xs(3, std::vector<Real>(_num_slip_sys)); // current config slip directions in global coords
   std::vector<std::vector<Real>> xm0(3, std::vector<Real>(_num_slip_sys)); // intermediate config plane normals in global coords
-  std::vector<std::vector<Real>> xm(3, std::vector<Real>(_num_slip_sys)); // current config plane normals in global coords  
 
   // ISVs
   Real rho_m0; // mobile dislocation density at beginning of step
@@ -166,6 +132,7 @@ void DDJ2StressUpdate2::computeQpStress()
   RankTwoTensor bstress; // backstress at end of step
   Real s_a; // athermal slip resistance
   Real s_t; // thermal slip resistance
+  Real M; // Taylor Factor
 
   Real gamma_dot_trial; // shear strain rate
   Real gamma_dot_g; // shear strain rate due to glide
@@ -173,14 +140,7 @@ void DDJ2StressUpdate2::computeQpStress()
   Real residual; // residual during Newton-Raphson iteration
   Real del_epsilon, del_epsilon_old; // current and previous values of gamma_dot
 
-  // Variables for Irradiation Defects
-  std::vector<Real> Nloop0(_num_slip_sys);  // Number Density of Irradiation Loops - Initial Value Read from Input File/SDV
-  std::vector<Real> dloop0(_num_slip_sys);  // Diameter of Irradiation Loops - Initial Value Read from Input File/SDV
-  std::vector<Real> Nloop(_num_slip_sys);  // Number Density of Irradiation Loops - Final Value to be stored into SDV
-  std::vector<Real> dloop(_num_slip_sys);  // Diameter of Irradiation Loops - Final Value to be stored into SDV  
-
-  // Old Elastic and Plastic Energies
-  Real psie_active0, psip_active0;  
+  std::vector<Real> sddsm(_num_slip_sys); // stress_dot_dot_schmid_matrix
 
   // Our model is based on V.R decomposition as opposed to MOOSE's R.U decomposition of the deformation gradient
   // F = V.R = R.U
@@ -203,12 +163,18 @@ void DDJ2StressUpdate2::computeQpStress()
   // Read grain size, if available
   _grainid = _current_elem->subdomain_id();
 
+  if (_GrainAreaSize){
+    _grain_size = _GrainAreaSize->getGrainSize(_grainid);
+  }
+  else{
+    _grain_size = 1.e10;
+  }
 
   if (_t_step <= 1) {
   // read in Euler angles
   if (_EulerAngFileReader){
-
       _grainid = _current_elem->subdomain_id();
+
       psi[0] = _EulerAngFileReader->getData(_grainid,0);
       psi[1] = _EulerAngFileReader->getData(_grainid,1);
       psi[2] = _EulerAngFileReader->getData(_grainid,2);
@@ -223,11 +189,8 @@ void DDJ2StressUpdate2::computeQpStress()
   }
   else{
     _grain_size = 1.e10;
-  }
-
-
-  }
-
+  }  
+}  
 
   // Read in material parameters
   if (_t_step <= 1){
@@ -244,7 +207,7 @@ void DDJ2StressUpdate2::computeQpStress()
     del[i][i] = 1;
   }
 
-// Read in slip system data
+ // Read in slip system data
   if (_t_step <= 1){
     MooseUtils::checkFileReadable(_slipSysFile);
     std::ifstream file_slip_sys;
@@ -287,7 +250,6 @@ void DDJ2StressUpdate2::computeQpStress()
     psi[1] = psi[1]*PI/180;
     psi[2] = psi[2]*PI/180;
 
-
   // Initialize F_p_inv_0
   for (unsigned int i = 0; i < 3; i++) {
     for(unsigned int j = 0; j < 3; j++) {
@@ -312,12 +274,6 @@ void DDJ2StressUpdate2::computeQpStress()
   // Initialize E_p_eff_cum
   E_p_eff_cum = 0;
 
-  // Initialize Active Work densities
-  _psie_active[_qp] = 0;
-  _psip_active[_qp] = 0;
-  psie_active0 = 0;
-  psip_active0 = 0;  
-
   rho_m0 = rho_m_zero;
   rho_i0 = rho_i_zero;
 
@@ -340,16 +296,7 @@ void DDJ2StressUpdate2::computeQpStress()
       }
     }    
 
-    // Read in dir_cos SDV 10-18
-    for (unsigned int i = 0; i<3; i++) {
-      for (unsigned int j = 0; j < 3; j++) {
-        n = n + 1;
-        dir_cos[i][j] = _state_var[_qp][n];
-      }
-    }
-    
-    
-    // Read the elastic part of F SDV 19-27
+    // Read the elastic part of F SDV 10-18
     for (unsigned int i = 0; i < 3; i++) {
       for (unsigned int j = 0; j < 3; j++) {
         n = n + 1;
@@ -357,7 +304,7 @@ void DDJ2StressUpdate2::computeQpStress()
       }
     }
 
-    // Read inverse of the plastic part of F SDV 28-36
+    // Read inverse of the plastic part of F SDV 19-27
     for (unsigned int i = 0; i < 3; i++) {
       for (unsigned int j = 0; j < 3; j++) {
         n = n + 1;
@@ -365,7 +312,7 @@ void DDJ2StressUpdate2::computeQpStress()
       }
     }
 
-    // Read E_p SDV 37-45
+    // Read E_p SDV 28-36
     for (unsigned int i = 0; i < 3; i++) {
       for (unsigned int j = 0; j < 3; j++) {
         n = n + 1;
@@ -373,15 +320,15 @@ void DDJ2StressUpdate2::computeQpStress()
       }
     }
 
-    // Read E_eff SDV 46
+    // Read E_eff SDV 37
     n = n + 1;
     E_eff = _state_var[_qp][n];
 
-    // Read E_p_eff SDV 47
+    // Read E_p_eff SDV 38
     n = n + 1;
     E_p_eff = _state_var[_qp][n];
 
-    // Read Np_star SDV 48-56
+    // Read Np_star SDV 39-47
     for (unsigned int i = 0; i < 3; i++) {
       for (unsigned int j = 0; j < 3; j++) {
         n = n + 1;
@@ -389,23 +336,23 @@ void DDJ2StressUpdate2::computeQpStress()
       }
     }
 
-    // Read del Epdot Effective value SDV 57
+    // Read del Epdot Effective value SDV 48
     n = n + 1;
     del_epsilon = _state_var[_qp][n];
 
-    // Read average dislocation glide rates  SDV 58
+    // Read average dislocation glide rates  SDV 49
     n = n + 1;
     // gamma_dot_g_avg0 = _state_var[_qp][n];
 
-    // Read mobile dislocation density values SDV 59
+    // Read mobile dislocation density values SDV 50
     n = n + 1;
     rho_m0 = _state_var[_qp][n];
 
-    // Read immobile dislocation density values SDV 60
+    // Read immobile dislocation density values SDV 51
     n = n + 1;
     rho_i0 = _state_var[_qp][n];
 
-    // Read back stress values SDV 61-69
+    // Read back stress values SDV 52-60
     for (unsigned int i = 0; i < 3; i++) {
       for (unsigned int j = 0; j < 3; j++) {
         n = n + 1;
@@ -413,11 +360,8 @@ void DDJ2StressUpdate2::computeQpStress()
       }
     }
 
-    // Read older work densities SDV70 & 71
-    n = n+1;
-    psie_active0  = _state_var[_qp][n];
-    n = n+1;
-    psip_active0  = _state_var[_qp][n];    
+
+
 
     // std::cout << "\nTotal no. of state vars read:" << n;
   } // End of initializations
@@ -440,14 +384,9 @@ void DDJ2StressUpdate2::computeQpStress()
     dir_cos0[2][1] = -c1*s2;
     dir_cos0[2][2] = c2;
 
-    for (unsigned int i = 0; i < 3; i++){
-      for (unsigned int j = 0; j < 3; j++){
-        dir_cos[i][j] = dir_cos0[i][j];
-      }
-    }
   }  
 
-  // Initialize ISOTROPIC 4th rank elastic stiffness tensor
+  // // Initialize ISOTROPIC 4th rank elastic stiffness tensor
   for (unsigned int i = 0; i < 3; i++) {
     for (unsigned int j = 0; j < 3; j++) {
       for (unsigned int k = 0; k < 3; k++) {
@@ -457,6 +396,7 @@ void DDJ2StressUpdate2::computeQpStress()
       }
     }
   }
+
 
   // Initialize arrays for averaging over grains
   for (unsigned int i = 0; i < 3; i++) {
@@ -492,8 +432,6 @@ void DDJ2StressUpdate2::computeQpStress()
   unsigned int N_incr, N_incr_total, iNR, N_ctr;
   Real dt_incr, depdse;
   RankTwoTensor dfgrd0, dfgrd1;
-  RankTwoTensor Ftheta, Ftheta_old;
-  RankTwoTensor total_eigenstrain, total_eigenstrain_old;
   Real array1[3][3], array2[3][3];
   Real array1_matrix[3][3], array2_matrix[3][3];
 
@@ -502,21 +440,8 @@ void DDJ2StressUpdate2::computeQpStress()
   Real isubincr = 0;
 
   // Initialize deformation gradients for beginning and end of subincrement.
-  for (auto i : make_range(_eigenstrain_names.size())) {
-    total_eigenstrain += (*_eigenstrains[i])[_qp];
-    total_eigenstrain_old += (*_eigenstrains_old[i])[_qp];
-  }
-
-  Ftheta.zero();
-  Ftheta_old.zero();
-  for (int i=0; i<3; ++i)
-  {
-      Ftheta(i,i) = sqrt(1.0 + 2.0* total_eigenstrain(i,i));
-      Ftheta_old(i,i) = sqrt(1.0 + 2.0* total_eigenstrain_old(i,i));
-  }  
-  
-  dfgrd0 = _deformation_gradient_old[_qp]* Ftheta_old.inverse();
-  dfgrd1 = _deformation_gradient[_qp] * Ftheta.inverse();
+  dfgrd0 = _deformation_gradient_old[_qp];
+  dfgrd1 = _deformation_gradient[_qp];
   F0 = dfgrd0;
   F1 = dfgrd1;
 
@@ -553,18 +478,6 @@ void DDJ2StressUpdate2::computeQpStress()
 
   F_el_inv = F_el.inverse();
 
-  // Rotate xs0 and xm0 to current coordinates, called xs and xm
-  for (unsigned int n = 0; n < _num_slip_sys; n++) {
-    for (unsigned int i = 0; i < 3; i++) {
-      xs[i][n] = 0.0;
-      xm[i][n] = 0.0;
-      for (unsigned int j = 0; j < 3; j++) {
-        xs[i][n] = xs[i][n] + F_el(i,j)*xs0[j][n];
-        xm[i][n] = xm[i][n] + xm0[j][n]*F_el_inv(j,i);
-      }
-    }
-  }  
-
   // Calculate elastic Green strain
   E_el = F_el.transpose() * F_el;
   E_el(0,0) = E_el(0,0) - 1.0;
@@ -594,22 +507,6 @@ void DDJ2StressUpdate2::computeQpStress()
       sig(i,j) = sig(i,j)/det;
     }
   }
-
-  // Calculate the Taylor Factor of each of the slip system
-  std::vector<Real> sddsm(_num_slip_sys);  // sig_dot_dot_schmid_mat
-  Real sig_L2norm = sig.L2norm();
-
-  // Calculate resolved shear stress for each slip system
-  for (unsigned int k = 0; k < _num_slip_sys; k++) {
-    sddsm[k] = 0;
-    for (unsigned int j = 0; j < 3; j++) {
-      for (unsigned int i = 0; i < 3; i++) {
-        sddsm[k] = sddsm[k] + xs[i][k]*xm[j][k]*sig(i,j);
-      }
-    }
-    sddsm[k] = sddsm[k]/sig_L2norm;
-  }  
-
 
   // Calculate deviatoric stress tensor
   Real trace_sig = (sig(0,0)+sig(1,1)+sig(2,2))/3.0;
@@ -658,11 +555,26 @@ void DDJ2StressUpdate2::computeQpStress()
       Np_star(i,j) = v*sdev_star(i,j);
     }
   }
+  
+  Real stress_l2norm = sig.L2norm();
+  // Calculate equivalent taylor factor
+  for (unsigned int k = 0; k < _num_slip_sys; k++) {
+    sddsm[k] = 0.0;
+    for (unsigned int j = 0; j < 3; j++) {
+      for (unsigned int i = 0; i < 3; i++) {
+        sddsm[k] = sddsm[k] + xs0[i][k]*xm0[j][k]*sig(i,j);
+      }
+    }
+    if(stress_l2norm > 0){
+      sddsm[k] = sddsm[k]/stress_l2norm;
+    }
+  }  
 
+  M = *std::max_element(sddsm.begin(),sddsm.end());
   // Calculate athermal slip resistance
   Real sum1 = 0.0;
   sum1 = p0*(rho_m + rho_i);
-  s_a = tau0 + hp_coeff/sqrt(grain_size) + k_rho*G*b_mag*sqrt(sum1);
+  s_a = M*(tau0 + hp_coeff/sqrt(grain_size) + k_rho*G*b_mag*sqrt(sum1));
 
   // Calculate reference shear stress
   s_t = frictional_stress;
@@ -696,7 +608,30 @@ void DDJ2StressUpdate2::computeQpStress()
     Real drhomded, drhoided, dsadrho, dsaded, dstded, dfded, dvmded, xlambda, d_disl;
 
     // TODO
-    NR_residual_J2 (_temp[_qp], dt_incr, F1, F_p_inv, F_p_inv_0, C, Np_star, rho_m0, rho_m, rho_i0, rho_i, bstress0, bstress, sig, sig_vm, sig_vm_star, s_a, s_t, gamma_dot_trial, residual);
+    NR_residual_J2 (
+      _num_slip_sys,
+      xs0,
+      xm0,
+      _temp[_qp], 
+      dt_incr, 
+      F1, 
+      F_p_inv, 
+      F_p_inv_0, 
+      C, 
+      Np_star, 
+      rho_m0, 
+      rho_m, 
+      rho_i0, 
+      rho_i, 
+      bstress0, 
+      bstress, 
+      sig, 
+      sig_vm, 
+      sig_vm_star, 
+      s_a, 
+      s_t, 
+      gamma_dot_trial, 
+      residual);
 
 //       if (sse > 0.0e0) {
 //         std::cout << "\n iNR:" << iNR;
@@ -1018,23 +953,15 @@ void DDJ2StressUpdate2::computeQpStress()
 
   // checkpoint("Storing ISVs")
   int n = -1;
-  // Store dir_cos0 SDV 1-9
-  for (unsigned int i = 0; i < 3; i++) {
-    for (unsigned int j = 0; j < 3; j++) {
-      n = n + 1;
-      _state_var[_qp][n] = dir_cos0[i][j];
-    }
-  }
+  // Read in dir_cos0 SDV 1-9
+    for (unsigned int i = 0; i<3; i++) {
+      for (unsigned int j = 0; j < 3; j++) {
+        n = n + 1;
+        _state_var[_qp][n]=  dir_cos0[i][j];
+      }
+    }    
 
-  // Store dir_cos SDV 10-18
-  for (unsigned int i = 0; i < 3; i++) {
-    for (unsigned int j = 0; j < 3; j++) {
-      n = n + 1;
-      _state_var[_qp][n] = dir_cos[i][j];
-    }
-  }  
-
-  // Store the elastic part of F SDV 19-27
+  // Store the elastic part of F SDV 10-18
   for (unsigned int i = 0; i < 3; i++) {
     for (unsigned int j = 0; j < 3; j++) {
       n = n + 1;
@@ -1042,7 +969,7 @@ void DDJ2StressUpdate2::computeQpStress()
     }
   }
 
-  // Store inverse of the plastic part of F SDV 28-36
+  // Store inverse of the plastic part of F SDV 19-27
   for (unsigned int i = 0; i < 3; i++) {
     for (unsigned int j = 0; j < 3; j++) {
       n = n + 1;
@@ -1060,7 +987,7 @@ void DDJ2StressUpdate2::computeQpStress()
   E_p(2,2) = E_p(2,2) - 1.0;
   E_p = 0.5 * E_p;
 
-  // Store E_p SDV 37-45
+  // Store E_p SDV 28-36
   for (unsigned int i = 0; i < 3; i++) {
     for (unsigned int j = 0; j < 3; j++) {
       n = n + 1;
@@ -1084,15 +1011,15 @@ void DDJ2StressUpdate2::computeQpStress()
   // Effective plastic strain
   E_p_eff = E_p_eff + sqrt((2./3.) * s2);
 
-  // Store E_eff SDV 46
+  // Store E_eff SDV 37
   n = n + 1;
   _state_var[_qp][n] = E_eff;
 
-  // Store E_p_eff SDV 47
+  // Store E_p_eff SDV 38
   n = n + 1;
   _state_var[_qp][n] = E_p_eff;
 
-  // Store Np_star  SDV 48-56
+  // Store Np_star  SDV 39-47
   for (unsigned int i = 0; i < 3; i++) {
     for (unsigned int j = 0; j < 3; j++) {
       n = n + 1;
@@ -1100,34 +1027,28 @@ void DDJ2StressUpdate2::computeQpStress()
     }
   }
 
-  // Store del Epdot Effective value SDV 57
+  // Store del Epdot Effective value SDV 48
   n = n + 1;
   _state_var[_qp][n] = del_epsilon;
 
-  // Store average dislocation glide rates SDV 58
+  // Store average dislocation glide rates SDV 49
   n = n + 1;
   _state_var[_qp][n] = gamma_dot_trial;
 
-  // Store dislocation densities SDV 59-60
+  // Store dislocation densities SDV 50-51
   n = n + 1;
   _state_var[_qp][n] = rho_m;
 
   n = n + 1;
   _state_var[_qp][n] = rho_i;
 
-  // Read backstress values SDV 61-69
+  // Read backstress values SDV 52-60
   for (unsigned int i = 0; i < 3; i++) {
     for (unsigned int j = 0; j < 3; j++) {
       n = n + 1;
       _state_var[_qp][n] = bstress(i,j);
     }
   }
-
-  // Store Elastic and Plastic Work Densities SDV 70-71
-  n = n+1; 
-  _state_var[_qp][n] = MetaPhysicL::raw_value(_psie_active[_qp]);
-  n = n +1; 
-  _state_var[_qp][n] = MetaPhysicL::raw_value(_psip_active[_qp]);
 
   // elasticity tensor
   for (unsigned int i = 0; i < 3; ++i){
@@ -1144,7 +1065,30 @@ void DDJ2StressUpdate2::computeQpStress()
 } // End computeStress()
 
 // NR_residual_J2()
-void DDJ2StressUpdate2::NR_residual_J2 (Real temp, Real dt, RankTwoTensor F1, RankTwoTensor &F_p_inv, RankTwoTensor F_p_inv_0, Real C[3][3][3][3], RankTwoTensor Np_star, Real &rho_m0, Real &rho_m, Real &rho_i0, Real &rho_i, RankTwoTensor &bstress0, RankTwoTensor &bstress, RankTwoTensor &sig, Real &sig_vm, Real &sig_vm_star, Real &s_a, Real &s_t, Real &gamma_dot_trial, Real &residual){
+void DDJ2StressUpdate2::NR_residual_J2 (
+  unsigned int num_slip_sys, 
+  std::vector<std::vector<Real>> &xs0, 
+  std::vector<std::vector<Real>> &xm0,   
+  Real temp, 
+  Real dt, 
+  RankTwoTensor F1, 
+  RankTwoTensor &F_p_inv, 
+  RankTwoTensor F_p_inv_0, 
+  Real C[3][3][3][3], 
+  RankTwoTensor Np_star, 
+  Real &rho_m0, 
+  Real &rho_m, 
+  Real &rho_i0, 
+  Real &rho_i, 
+  RankTwoTensor &bstress0, 
+  RankTwoTensor &bstress, 
+  RankTwoTensor &sig, 
+  Real &sig_vm, 
+  Real &sig_vm_star, 
+  Real &s_a, 
+  Real &s_t, 
+  Real &gamma_dot_trial, 
+  Real &residual){
 
   Real xL_p_inter[3][3];
 
@@ -1152,6 +1096,7 @@ void DDJ2StressUpdate2::NR_residual_J2 (Real temp, Real dt, RankTwoTensor F1, Ra
   RankTwoTensor E_el;
   RankTwoTensor Spk2, sdev, sdev_star;
   RankTwoTensor Np;
+  Real M;
 
   Real gamma_dot_NR;
 
@@ -1321,8 +1266,25 @@ void DDJ2StressUpdate2::NR_residual_J2 (Real temp, Real dt, RankTwoTensor F1, Ra
   }
 
   // Calculate the athermal slip resistance
+  Real stress_l2norm = sig.L2norm();
+  // Calculate equivalent taylor factor
+  std::vector<Real> sddsm(_num_slip_sys); // stress_dot_dot_schmid_matrix
+  for (unsigned int k = 0; k < _num_slip_sys; k++) {
+    sddsm[k] = 0.0;
+    for (unsigned int j = 0; j < 3; j++) {
+      for (unsigned int i = 0; i < 3; i++) {
+        sddsm[k] = sddsm[k] + xs0[i][k]*xm0[j][k]*sig(i,j);
+      }
+    }
+    if(stress_l2norm > 0){
+      sddsm[k] = sddsm[k]/stress_l2norm;
+    }
+  }  
+
+  M = *std::max_element(sddsm.begin(),sddsm.end());  
   sum1 = p0*(rho_m + rho_i);
-  s_a = tau0 + hp_coeff/sqrt(grain_size) + k_rho*G*b_mag*sqrt(sum1);
+  s_a = M*(tau0 + hp_coeff/sqrt(grain_size) + k_rho*G*b_mag*sqrt(sum1));
+
 
   // Calculate thermal slip resistance
   s_t = frictional_stress;

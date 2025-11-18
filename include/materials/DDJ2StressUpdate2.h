@@ -31,8 +31,7 @@ protected:
   int _isEulerRadian;
   int _isEulerBunge;
 
-  bool _irad_defects;
-  bool _deltaH_eV;
+
 
   virtual void initQpStatefulProperties();
   virtual void computeQpStress();
@@ -42,10 +41,7 @@ protected:
 
   MaterialProperty<Point> & _euler_ang;
 
-  // The eigenstrains
-  std::vector<MaterialPropertyName> _eigenstrain_names;
-  std::vector<const MaterialProperty<RankTwoTensor> *> _eigenstrains;
-  std::vector<const MaterialProperty<RankTwoTensor> *> _eigenstrains_old;  
+
 
   MaterialProperty<std::vector<Real> > & _state_var;
   const MaterialProperty<std::vector<Real> > & _state_var_old;
@@ -66,37 +62,8 @@ protected:
   const MaterialProperty<RankTwoTensor> & _stress_old;
   MaterialProperty<RankFourTensor> & _Cel_cp;
 
-  // Name of the Phase Field Variable
-  const VariableName _d_name;
-
-  /// Decomposition types
-  const enum class Decomposition {none, voldev} _decomposition;
-
-  // @ {Strain Energy and its Derivatives with respect to damage
-  const MaterialPropertyName _psie_name;
-  ADMaterialProperty<Real> & _psie;
-  ADMaterialProperty<Real> & _psie_active;
-  ADMaterialProperty<Real> & _dpsie_dd;
-  //}
 
 
-  //@ {Plastic Strain Energy and its Derivatives with respect to damage
-  const MaterialPropertyName _psip_name;
-  ADMaterialProperty<Real> & _psip;
-  ADMaterialProperty<Real> & _psip_active;
-  ADMaterialProperty<Real> & _dpsip_dd;  
-  // }
-
-
-  // @ {degradation function of elastic energy and its derivatives with respect to damage
-  const MaterialPropertyName _g_name;
-  const ADMaterialProperty<Real> & _g;
-  const ADMaterialProperty<Real> & _dg_dd;
-  // }
-  
-  // @{ Plastic Heat Generation
-  const ADMaterialProperty<Real> & _heat;
-  //}
   
 
   // parameters/variables used for calculations
@@ -114,7 +81,30 @@ protected:
   Real power(Real x, Real y);
   Real sgn(Real x);
 
-  void NR_residual_J2 (Real temp, Real dt, RankTwoTensor F1, RankTwoTensor &F_p_inv, RankTwoTensor F_p_inv_0, Real C[3][3][3][3], RankTwoTensor Np_star, Real &rho_m0, Real &rho_m, Real &rho_i0, Real &rho_i, RankTwoTensor &bstress0, RankTwoTensor &bstress, RankTwoTensor &sig, Real &sig_vm, Real &sig_vm_star, Real &s_a, Real &s_t, Real &gamma_dot_trial, Real &residual);
+  void NR_residual_J2 (
+    unsigned int num_slip_sys, 
+    std::vector<std::vector<Real>> &xs0, 
+    std::vector<std::vector<Real>> &xm0,     
+    Real temp, 
+    Real dt, 
+    RankTwoTensor F1, 
+    RankTwoTensor &F_p_inv, 
+    RankTwoTensor F_p_inv_0, 
+    Real C[3][3][3][3], 
+    RankTwoTensor Np_star, 
+    Real &rho_m0, 
+    Real &rho_m, 
+    Real &rho_i0, 
+    Real &rho_i, 
+    RankTwoTensor &bstress0, 
+    RankTwoTensor &bstress, 
+    RankTwoTensor &sig, 
+    Real &sig_vm, 
+    Real &sig_vm_star, 
+    Real &s_a, 
+    Real &s_t, 
+    Real &gamma_dot_trial, 
+    Real &residual);
 
   Real tolerance;
 
