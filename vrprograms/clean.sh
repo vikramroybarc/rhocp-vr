@@ -5,3 +5,4 @@ rm -rf -- **/log*
 rm -rf lib/
 rm -rf test/lib
 rm -rf src/.libs
+rm -rf out*

@@ -119,6 +119,7 @@ protected:
   void Voigt_to_forth(Real b[6][6], Real (&a)[3][3][3][3]);
   void aaaa_dot_dot_bbbb(Real a[3][3][3][3], Real b[3][3][3][3], Real (&product)[3][3][3][3]);
   void aaaa_dot_dot_bb(Real a[3][3][3][3], Real b[3][3], Real (&product)[3][3]);
+  void aaaa_dot_dot_bb2(Real a[3][3][3][3], RankTwoTensor bT, RankTwoTensor (&productT));
   void aa_dot_bb(Real a[3][3], Real b[3][3], Real (&product)[3][3]);
   Real aa_dot_dot_bb(Real a[3][3], Real b[3][3]);
   void bunge_angles(Real (&array1)[3][3], Real (&psi0)[3]);
@@ -233,7 +234,6 @@ protected:
     
   // Function for Calculation of Cauchy Stress
   RankTwoTensor computeCauchyStress(
-    const RankTwoTensor E_el,
     const RankTwoTensor F_el,
     Real C[3][3][3][3], 
     const bool converged
@@ -241,7 +241,6 @@ protected:
 
   // Function for Calculation of Cauchy Stress No Decomposition
   RankTwoTensor computeCauchyStressNoDecomposition(
-    const RankTwoTensor E_el,
     const RankTwoTensor F_el,
     Real C[3][3][3][3], 
     const bool converged
@@ -250,7 +249,6 @@ protected:
 
   // Function for Calculation of Cauchy VolDev Spectral Decomposition
   RankTwoTensor computeCauchyStressVolDevDecomposition(
-    const RankTwoTensor E_el,
     const RankTwoTensor F_el,
     Real C[3][3][3][3], 
     const bool converged

@@ -135,7 +135,8 @@
         "NoDegradation.C": "cpp",
         "PowerDegradationFunction.C": "cpp",
         "RationalDegradationFunction.C": "cpp",
-        "RhocpApp.C": "cpp"
+        "RhocpApp.C": "cpp",
+        "SideSetsFromNormalsGenerator.C": "cpp"
     },
     "C_Cpp.errorSquiggles": "enabled",
     "[moose]": {
@@ -188,6 +189,13 @@
             "backgroundColor": "transparent",
             "bold": false,
             "italic": false
+        },
+        {
+        "terminal.integrated.env.linux": {
+        "GTK_PATH": "",
+        "GIO_MODULE_DIR": ""
+    }
         }
+        
     ]
 }
