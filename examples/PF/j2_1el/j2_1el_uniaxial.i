@@ -148,19 +148,19 @@
   [./rho_m]
     type = StateVariable
     variable = rho_m
-    sdv_id = 59
+    sdv_id = 50
     execute_on = timestep_end
   [../]
   [./rho_i]
     type = StateVariable
     variable = rho_i
-    sdv_id = 60
+    sdv_id = 51
     execute_on = timestep_end
   [../]
   [./Ep_eff]
     type = StateVariable
     variable = Ep_eff
-    sdv_id = 47
+    sdv_id = 38
     execute_on = timestep_end
   [../]
 []
@@ -217,10 +217,9 @@
   [./J2StressUpdate]
     type = DDJ2StressUpdate2
     num_slip_sys = 24
-    phase_field = d
     slipSysFile = bcc_slip_sys1.in    
     propsFile = j2_props.in
-    num_state_vars = 71
+    num_state_vars = 60
     num_props = 27
     temp = 300 # K
     tol = 5e-7
