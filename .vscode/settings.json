@@ -136,7 +136,11 @@
         "PowerDegradationFunction.C": "cpp",
         "RationalDegradationFunction.C": "cpp",
         "RhocpApp.C": "cpp",
-        "SideSetsFromNormalsGenerator.C": "cpp"
+        "SideSetsFromNormalsGenerator.C": "cpp",
+        "ExtraNodesetGenerator.C": "cpp",
+        "DDJ2StressUpdate.C": "cpp",
+        "DDJ2StressUpdate copy.C": "cpp",
+        "DDJ2StressUpdate2.C": "cpp"
     },
     "C_Cpp.errorSquiggles": "enabled",
     "[moose]": {

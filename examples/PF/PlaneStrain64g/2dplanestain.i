@@ -5,7 +5,7 @@
 [Mesh]
     [fmg]
         type = FileMeshGenerator
-        file = n64-id1.msh      
+        file = n512-id1.msh   
         # type = GeneratedMeshGenerator
         # elem_type = QUAD8
         # dim = 2
@@ -74,13 +74,13 @@
     boundary = xn_face
     value = 0.0
   [../]
-  # [./back_roller]
-  #   type = DirichletBC
-  #   preset = true
-  #   variable = disp_z
-  #   boundary = zn_face
-  #   value = 0.0
-  # [../]
+  [./back_roller]
+    type = DirichletBC
+    preset = true
+    variable = disp_z
+    boundary = zn_face
+    value = 0.0
+  [../]
 
   # fixed BCs
   # corner node fixed in all DOFs
@@ -158,7 +158,7 @@
 [UserObjects]
   [euler_angle]
     type = EulerAngleReader
-    file_name = orientations_roltex1.in
+    file_name = BCC_roll_texture2.in
     execute_on = 'initial'
   []
 []
