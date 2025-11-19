@@ -32,7 +32,7 @@ DDJ2StressUpdate2::validParams()
   params.addRequiredCoupledVar("phase_field","Name of the phase-field (damage variable)");
   params.addParam<MaterialPropertyName>("elastic_strain_energy", "psie", "elastic strain energy density function");
   params.addParam<MaterialPropertyName>("plastic_strain_energy", "psip", "plastic strain energy density function");
-  params.addParam<MooseEnum>("decomposition" , MooseEnum("NONE SPECTRAL VOLDEV", "NONE"), "The decomposition method");  
+  params.addParam<MooseEnum>("decomposition" , MooseEnum("NONE VOLDEV", "NONE"), "The decomposition method");  
   params.addParam<MaterialPropertyName>("degradation_function", "g", "The degradation function");    
   return params;
 }
@@ -390,6 +390,8 @@ void DDJ2StressUpdate2::computeQpStress()
       }
     }
 
+    // todo Add Elastic and Plastic Energies
+
 
 
 
@@ -524,35 +526,37 @@ void DDJ2StressUpdate2::computeQpStress()
 
   F_el_inv = F_el.inverse();
 
-  // Calculate elastic Green strain
-  E_el = F_el.transpose() * F_el;
-  E_el(0,0) = E_el(0,0) - 1.0;
-  E_el(1,1) = E_el(1,1) - 1.0;
-  E_el(2,2) = E_el(2,2) - 1.0;
-  E_el = 0.5 * E_el;
+  // // Calculate elastic Green strain
+  // E_el = F_el.transpose() * F_el;
+  // E_el(0,0) = E_el(0,0) - 1.0;
+  // E_el(1,1) = E_el(1,1) - 1.0;
+  // E_el(2,2) = E_el(2,2) - 1.0;
+  // E_el = 0.5 * E_el;
 
-  // Multiply the anisotropic stiffness tensor by the Green strain to get the 2nd Piola Kirkhhoff stress
-  Real E_el_matrix[3][3], Spk2_matrix[3][3];
-  for (unsigned int i = 0; i < 3; i++) {
-    for (unsigned int j = 0; j < 3; j++) {
-      E_el_matrix[i][j] = E_el(i,j);
-    }
-  }
-  aaaa_dot_dot_bb(C,E_el_matrix,Spk2_matrix);
-  for (unsigned int i = 0; i < 3; i++) {
-    for (unsigned int j = 0; j < 3; j++) {
-      Spk2(i,j) = Spk2_matrix[i][j];
-    }
-  }
+  // // Multiply the anisotropic stiffness tensor by the Green strain to get the 2nd Piola Kirkhhoff stress
+  // Real E_el_matrix[3][3], Spk2_matrix[3][3];
+  // for (unsigned int i = 0; i < 3; i++) {
+  //   for (unsigned int j = 0; j < 3; j++) {
+  //     E_el_matrix[i][j] = E_el(i,j);
+  //   }
+  // }
+  // aaaa_dot_dot_bb(C,E_el_matrix,Spk2_matrix);
+  // for (unsigned int i = 0; i < 3; i++) {
+  //   for (unsigned int j = 0; j < 3; j++) {
+  //     Spk2(i,j) = Spk2_matrix[i][j];
+  //   }
+  // }
 
-  // Convert from PK2 stress to Cauchy stress
-  Real det = F_el.det();
-  sig =  F_el * Spk2 * F_el.transpose();
-  for (unsigned int i = 0; i < 3; i++) {
-    for (unsigned int j = 0; j < 3; j++) {
-      sig(i,j) = sig(i,j)/det;
-    }
-  }
+  // // Convert from PK2 stress to Cauchy stress
+  // Real det = F_el.det();
+  // sig =  F_el * Spk2 * F_el.transpose();
+  // for (unsigned int i = 0; i < 3; i++) {
+  //   for (unsigned int j = 0; j < 3; j++) {
+  //     sig(i,j) = sig(i,j)/det;
+  //   }
+  // }
+
+  sig = computeCauchyStress(F_el, C, converged);
 
   // Calculate deviatoric stress tensor
   Real trace_sig = (sig(0,0)+sig(1,1)+sig(2,2))/3.0;
@@ -1203,35 +1207,37 @@ void DDJ2StressUpdate2::NR_residual_J2 (
   }
   RankTwoTensor F_el_inv = F_el.inverse();
 
-  // Calculate elastic Green Strain
-  E_el = F_el.transpose() * F_el;
-  E_el(0,0) = E_el(0,0) - 1.0;
-  E_el(1,1) = E_el(1,1) - 1.0;
-  E_el(2,2) = E_el(2,2) - 1.0;
-  E_el = 0.5 * E_el;
+  // // Calculate elastic Green Strain
+  // E_el = F_el.transpose() * F_el;
+  // E_el(0,0) = E_el(0,0) - 1.0;
+  // E_el(1,1) = E_el(1,1) - 1.0;
+  // E_el(2,2) = E_el(2,2) - 1.0;
+  // E_el = 0.5 * E_el;
 
-  // Multiply the stiffness tensor by the Green strain to get the 2nd Piola Kirkhhoff stress
-  Real E_el_matrix[3][3], Spk2_matrix[3][3];
-  for (unsigned int i = 0; i < 3; i++) {
-    for (unsigned int j = 0; j < 3; j++) {
-      E_el_matrix[i][j] = E_el(i,j);
-    }
-  }
-  aaaa_dot_dot_bb(C,E_el_matrix,Spk2_matrix);
-  for (unsigned int i = 0; i < 3; i++) {
-    for (unsigned int j = 0; j < 3; j++) {
-      Spk2(i,j) = Spk2_matrix[i][j];
-    }
-  }
+  // // Multiply the stiffness tensor by the Green strain to get the 2nd Piola Kirkhhoff stress
+  // Real E_el_matrix[3][3], Spk2_matrix[3][3];
+  // for (unsigned int i = 0; i < 3; i++) {
+  //   for (unsigned int j = 0; j < 3; j++) {
+  //     E_el_matrix[i][j] = E_el(i,j);
+  //   }
+  // }
+  // aaaa_dot_dot_bb(C,E_el_matrix,Spk2_matrix);
+  // for (unsigned int i = 0; i < 3; i++) {
+  //   for (unsigned int j = 0; j < 3; j++) {
+  //     Spk2(i,j) = Spk2_matrix[i][j];
+  //   }
+  // }
 
-  // Convert from PK2 stress to Cauchy stress
-  Real det = F_el.det();
-  sig =  F_el * Spk2 * F_el.transpose();
-  for (unsigned int i = 0; i < 3; i++) {
-    for (unsigned int j = 0; j < 3; j++) {
-      sig(i,j) = sig(i,j)/det;
-    }
-  }
+  // // Convert from PK2 stress to Cauchy stress
+  // Real det = F_el.det();
+  // sig =  F_el * Spk2 * F_el.transpose();
+  // for (unsigned int i = 0; i < 3; i++) {
+  //   for (unsigned int j = 0; j < 3; j++) {
+  //     sig(i,j) = sig(i,j)/det;
+  //   }
+  // }
+
+  sig = computeCauchyStress(F_el, C, false);
 
   // Calculate deviatoric stress tensor
   Real trace_sig = (sig(0,0)+sig(1,1)+sig(2,2))/3.0;
@@ -1638,3 +1644,181 @@ Real DDJ2StressUpdate2::max_val(Real a, Real b)
     return b;
   }
 }
+
+// Another Version of aaaa_dot_dot_bb which takes/gives input/output in form of RankTwoTensor
+void DDJ2StressUpdate2::aaaa_dot_dot_bb2(Real a[3][3][3][3], RankTwoTensor bT, RankTwoTensor (&productT)) {
+
+  // Convert Rank Two Tensor into Matrix
+    Real b[3][3], product[3][3];
+    for (unsigned int i = 0; i < 3; i++) {
+     for (unsigned int j = 0; j < 3; j++) {
+       b[i][j] = bT(i,j);
+    }
+    }  
+
+
+  for (unsigned int i = 0; i < 3; i++) {
+    for (unsigned int j = 0; j < 3; j++) {
+      product[i][j] = 0.0;
+      for (unsigned int k = 0; k < 3; k++) {
+        for (unsigned int l = 0; l < 3; l++) {
+          product[i][j] = product[i][j] + a[i][j][k][l]*b[k][l];
+        }
+      }
+    }
+  }
+
+  // Convert Product into RankTwoTensor
+    for (unsigned int i = 0; i < 3; i++) {
+     for (unsigned int j = 0; j < 3; j++) {
+      productT(i,j) = product[i][j];
+    }
+    }   
+
+}
+
+
+// Compute Cauchy Stress
+RankTwoTensor DDJ2StressUpdate2::computeCauchyStress(
+    const RankTwoTensor & F_el, 
+    Real  C[3][3][3][3], 
+    const bool converged){
+        RankTwoTensor cauchyStress;
+
+        if(_decomposition == Decomposition::none)
+          cauchyStress = computeCauchyStressNoDecomposition(F_el, C, converged);
+
+        else if(_decomposition == Decomposition::voldev)
+          cauchyStress == computeCauchyStressVolDevDecomposition(F_el, C, converged);
+
+        else
+          paramError("decomposition", "Unsupported decomposition type");
+
+        return cauchyStress;  
+
+    }
+
+      RankTwoTensor DDJ2StressUpdate2::computeCauchyStressNoDecomposition(
+        const RankTwoTensor & F_el,
+        Real C[3][3][3][3], 
+        const bool converged)
+      {
+      
+      RankTwoTensor Spk2, sig, cauchyStress_intact;
+      RankTwoTensor cauchyStress;
+      RankTwoTensor I2(RankTwoTensor::initIdentity);
+      RankTwoTensor E_el;
+
+      // Calculate elastic Green strain
+      E_el = 0.5*(F_el.transpose() * F_el - I2);
+      
+      
+
+  
+    aaaa_dot_dot_bb2(C,E_el,Spk2);
+
+
+    // Convert from PK2 stress to Cauchy stress
+    Real det = F_el.det();
+    sig =  F_el * Spk2 * F_el.transpose();
+    for (unsigned int i = 0; i < 3; i++) {
+    for (unsigned int j = 0; j < 3; j++) {
+      sig(i,j) = sig(i,j)/det;
+    }
+    }
+
+    cauchyStress_intact = sig;
+
+
+
+    cauchyStress = MetaPhysicL::raw_value(_g[_qp]) * cauchyStress_intact;
+
+
+    // IF called after the convergence then provide the strain energy density
+    if(converged){
+       _psie_active[_qp] = 0.5*cauchyStress_intact.doubleContraction(E_el);
+       _psie[_qp] = _g[_qp] *  _psie_active[_qp];
+       _dpsie_dd[_qp] = _dg_dd[_qp] * _psie_active[_qp];
+    }
+
+
+    return cauchyStress;
+
+  }
+  
+  RankTwoTensor DDJ2StressUpdate2::computeCauchyStressVolDevDecomposition(
+    const RankTwoTensor & F_el, 
+    Real  C[3][3][3][3], 
+    const bool converged){
+    
+ RankTwoTensor Spk2a, Spk2i, sig_active,sig_inactive, cauchyStress, cauchyStress_intact;
+    RankTwoTensor F_el_iso, F_el_vol;
+    RankTwoTensor E_el_vol, E_el_iso, E_el_active, E_el_inactive;
+    RankTwoTensor I2(RankTwoTensor::initIdentity);
+    RankTwoTensor E_el;
+
+    // Calculate elastic Green strain
+    E_el = 0.5*(F_el.transpose() * F_el - I2);
+
+    // Divide the F_el into Volumetric and Isoclinic Components
+    Real det = F_el.det();
+    F_el_iso = pow(det, -(1/3))*F_el;
+    F_el_vol = pow(det, (1/3) )*I2;
+
+
+    // Determine the Volumetric and Isochoric Components of Green Strain Tensor
+    E_el_vol = 0.5*(F_el_vol.transpose() * F_el_vol - I2);
+    E_el_iso = 0.5*(F_el_iso.transpose() * F_el_iso - I2);
+
+    // Consider both components while in tension and consider only isochoric component in compression
+    if(det - 1.0 > 0){ // In Tension
+      E_el_active = F_el_vol.transpose() * E_el_iso * F_el_vol + E_el_vol; 
+      E_el_inactive = 0;
+    }
+    else { // In Compression
+      E_el_active = F_el_vol.transpose() * E_el_iso * F_el_vol; 
+      E_el_inactive = E_el_vol;  
+    }
+
+
+    // Multiply the anisotropic stiffness tensor 
+    // by the Green strain to get the 2nd Piola Kirkhhoff stress
+    aaaa_dot_dot_bb2(C,E_el_active,Spk2a);
+
+
+    // Convert from PK2 stress to Cauchy stress    
+    sig_active =  F_el * Spk2a * F_el.transpose();
+    for (unsigned int i = 0; i < 3; i++) {
+    for (unsigned int j = 0; j < 3; j++) {
+      sig_active(i,j) = sig_active(i,j)/det;
+    }
+    }
+
+    // Multiply the anisotropic stiffness tensor 
+    // by the Green strain to get the 2nd Piola Kirkhhoff stress
+  
+    aaaa_dot_dot_bb2(C,E_el_inactive,Spk2i);
+
+    // Convert from PK2 stress to Cauchy stress
+    sig_inactive =  F_el * Spk2i * F_el.transpose();
+    for (unsigned int i = 0; i < 3; i++) {
+    for (unsigned int j = 0; j < 3; j++) {
+      sig_inactive(i,j) = sig_inactive(i,j)/det;
+    }
+    }
+
+    cauchyStress_intact = sig_active + sig_inactive;
+
+    cauchyStress = MetaPhysicL::raw_value(_g[_qp]) * sig_active + sig_inactive;
+    
+    if(converged){
+      Real psie_inactive = 0.5*sig_inactive.doubleContraction(E_el_inactive);
+      _psie_active[_qp] = 0.5*cauchyStress_intact.doubleContraction(E_el) - psie_inactive;
+      _psie[_qp] = _g[_qp] * _psie_active[_qp] + psie_inactive;
+      _dpsie_dd[_qp] = _dg_dd[_qp] * _psie_active[_qp];
+    }
+
+    return cauchyStress;
+
+    }
+  

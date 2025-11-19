@@ -113,6 +113,7 @@ protected:
   void Voigt_to_forth(Real b[6][6], Real (&a)[3][3][3][3]);
   void aaaa_dot_dot_bbbb(Real a[3][3][3][3], Real b[3][3][3][3], Real (&product)[3][3][3][3]);
   void aaaa_dot_dot_bb(Real a[3][3][3][3], Real b[3][3], Real (&product)[3][3]);
+  void aaaa_dot_dot_bb2(Real a[3][3][3][3], RankTwoTensor bT, RankTwoTensor (&productT));
   void aa_dot_dot_bbbb(Real a[3][3], Real b[3][3][3][3], Real (&product)[3][3]);
   void aa_dot_bb(Real a[3][3], Real b[3][3], Real (&product)[3][3]);
   Real aa_dot_dot_bb(Real a[3][3], Real b[3][3]);
@@ -149,7 +150,23 @@ protected:
   Real act_vol;
   Real delF0;
 
-  // Variables in 
+  // @ Stress Decomposition Methods
+  RankTwoTensor computeCauchyStress(
+    const RankTwoTensor & F_el, 
+    Real  C[3][3][3][3], 
+    const bool converged);
+  RankTwoTensor computeCauchyStressNoDecomposition(
+    const RankTwoTensor & F_el, 
+    Real  C[3][3][3][3], 
+    const bool converged);
+  RankTwoTensor computeCauchyStressVolDevDecomposition(
+    const RankTwoTensor & F_el, 
+    Real  C[3][3][3][3], 
+    const bool converged);
+
+  //
+
+  // Variables in Props File
   Real 
   YM, 
   YM_perK, 
