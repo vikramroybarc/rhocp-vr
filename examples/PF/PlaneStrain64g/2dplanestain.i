@@ -137,21 +137,17 @@
     phase_field = d
     property_name = g
   []
-  [CPStressUpdate]
-    type = DDCPStressUpdate4
-    num_props = 48
-    num_slip_sys = 24 
-    num_state_vars = 148 # 52 + 3*num_slip_sys
-    phase_field = d
-    propsFile = bcc_props.in
-    slipSysFile = bcc_slip_sys1.in
-    tol = 1e-6
-    temp = 773
-    deltaH_eV = false
-    degradation_function = g
-    decomposition = NONE
+  [./J2StressUpdate]
+    type = DDJ2StressUpdate2
+    num_slip_sys = 24
+    slipSysFile = bcc_slip_sys1.in    
+    propsFile = j2_props.in
+    num_state_vars = 60
+    num_props = 27
+    temp = 300 # K
+    tol = 5e-7
     EulerAngFileReader = euler_angle    
-  []
+  [../]
     
 []
 

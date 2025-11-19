@@ -1,19 +1,41 @@
 [GlobalParams]
-  displacements = 'disp_x disp_y disp_z'
+  displacements = 'disp_x disp_y'
 []
 
 [Mesh]
-  type = GeneratedMesh
-  dim = 3
-  xmin = 0.0
-  xmax = 0.1
-  ymin = 0.0
-  ymax = 0.1
-  zmin = 0.0
-  zmax = 0.1
-  nx = 1
-  ny = 1
-  nz = 1
+    [fmg]
+        type = FileMeshGenerator
+        file = n64-id1.msh
+        # type = GeneratedMeshGenerator
+        # elem_type = QUAD8
+        # dim = 2
+        # nx = 4
+        # ny = 4
+        # xmin = 0.0
+        # xmax = 1.0
+        # ymin = 0.0
+        # ymax = 1.0
+    []  
+    [bot_corner]
+        type = ExtraNodesetGenerator
+        input = fmg
+        new_boundary = bot_corner
+        coord = '0 0 0'                
+    []
+    [add_side_sets]
+    type = SideSetsFromNormalsGenerator
+    normals = '1  0  0
+               0  1  0
+               0  0  1
+              -1  0  0
+               0 -1  0
+               0  0 -1'
+    fixed_normal = false
+    new_boundary = 'xp_face yp_face zp_face xn_face yn_face zn_face'
+    input=bot_corner
+  []      
+    
+    construct_side_list_from_node_list = true
 []
 
 [Variables]
@@ -23,11 +45,6 @@
     scaling = 1e-4
   [../]
   [./disp_y]
-    order = FIRST
-    family = LAGRANGE
-    scaling = 1e-4
-  [../]
-  [./disp_z]
     order = FIRST
     family = LAGRANGE
     scaling = 1e-4
@@ -174,43 +191,51 @@
   [./dts]
     type = PiecewiseLinear
     x = '0 0.2'
-    y = '0.0005 0.1'
+    y = '0.0005 0.5'
   [../]
 []
 
 [BCs]
-
-  [./x_bot]
-    type = DirichletBC
-    preset = true
-    variable = disp_x
-    boundary = left
-    value = 0.0
-  [../]
-
-  [./y_bot]
+  # roller BCs on lateral faces
+  [./bottom_roller]
     type = DirichletBC
     preset = true
     variable = disp_y
-    boundary = bottom
+    boundary = yn_face
     value = 0.0
   [../]
-
-  [./z_bot]
+  [./left_roller]
     type = DirichletBC
     preset = true
-    variable = disp_z
-    boundary = back
+    variable = disp_x
+    boundary = xn_face
     value = 0.0
   [../]
 
-  [./y_pull_function]
-    type = PresetVelocity # FunctionDirichletBC
-    variable = disp_z
-    boundary = front
-    function = top_pull
+  # fixed BCs
+  # corner node fixed in all DOFs
+  [./bottom_nodes_x]
+    type = DirichletBC
+    preset = true
+    variable = disp_x
+    boundary = bot_corner
+    value = 0.0
+  [../]
+  [./bottom_nodes_y]
+    type = DirichletBC
+    preset = true
+    variable = disp_y
+    boundary = bot_corner
+    value = 0.0
   [../]
 
+  # tensile loading along z-direction
+  [./y_pull_function]
+    type = PresetVelocity
+    variable = disp_y
+    boundary = yp_face
+    function = top_pull
+  [../]
 []
 
 [Materials]
