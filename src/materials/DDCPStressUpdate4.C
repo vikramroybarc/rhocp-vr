@@ -33,7 +33,6 @@ DDCPStressUpdate4::validParams()
   params.addParam<std::vector<MaterialPropertyName>>(
       "eigenstrain_names", {}, "List of eigenstrains to be applied in this strain calculation");
   params.addParam<bool>("climbmodel", false, "Consider Climb Strains in Analysis");
-  params.addParam<std::vector<Real>>("coefficients",{0}, "Coefficients a,b & length conversion factor to m, for modifying intmat with change in dislocation density");
   params.addParam<unsigned int>("sliplaw", 1, "Slip Law Formulation for Calculations");
   params.addParam<unsigned int>("crsslaw", 1, "CRSS Law Formulation for Calculations");
   params.addParam<bool>("irad_defects", false, "Are Irradiation Defects present in calculations ?");
@@ -1735,9 +1734,10 @@ void DDCPStressUpdate4::computeQpStress()
     }
   }
 
-  // _stress[_qp] = sig;
+  _stress[_qp] = sig;
+  computeCauchyStress(F_el, C, converged); 
   // todo Check and Compare results with sig and check the calculations of elastic energies
-  _stress[_qp] = computeCauchyStress(F_el, C, converged); 
+  // _stress[_qp] = computeCauchyStress(F_el, C, converged); 
 
   _euler_ang[_qp](0) = psi[0];
   _euler_ang[_qp](1) = psi[1];

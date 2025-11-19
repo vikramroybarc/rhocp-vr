@@ -24,7 +24,16 @@ DDJ2StressUpdate2::validParams()
   params.addCoupledVar("temp", 300, "Temperature");
   params.addParam<UserObjectName>("EulerAngFileReader", "Name of the EulerAngleReader UO");
   params.addParam<int>("isEulerRadian", 0, "Are Euler angles specified in radians");
-  params.addParam<int>("isEulerBunge", 0, "Are Euler angles specified in Bunge notation");  
+  params.addParam<int>("isEulerBunge", 0, "Are Euler angles specified in Bunge notation");
+  params.addParam<std::vector<MaterialPropertyName>>(
+      "eigenstrain_names", {}, "List of eigenstrains to be applied in this strain calculation");  
+  params.addParam<bool>("irad_defects", false, "Are Irradiation Defects present in calculations ?");
+  params.addParam<bool>("deltaH_eV", false, "deltaH in Props file given in eV instead of multiplier.");
+  params.addRequiredCoupledVar("phase_field","Name of the phase-field (damage variable)");
+  params.addParam<MaterialPropertyName>("elastic_strain_energy", "psie", "elastic strain energy density function");
+  params.addParam<MaterialPropertyName>("plastic_strain_energy", "psip", "plastic strain energy density function");
+  params.addParam<MooseEnum>("decomposition" , MooseEnum("NONE SPECTRAL VOLDEV", "NONE"), "The decomposition method");  
+  params.addParam<MaterialPropertyName>("degradation_function", "g", "The degradation function");    
   return params;
 }
 
@@ -45,7 +54,10 @@ DDJ2StressUpdate2::DDJ2StressUpdate2(const InputParameters & parameters) :
                                : NULL),
     _isEulerRadian(getParam<int>("isEulerRadian")),
     _isEulerBunge(getParam<int>("isEulerBunge")),     
-    _euler_ang(declareProperty<Point>("euler_ang")),                              
+    _euler_ang(declareProperty<Point>("euler_ang")), 
+    _eigenstrain_names(getParam<std::vector<MaterialPropertyName>>("eigenstrain_names")),
+    _eigenstrains(_eigenstrain_names.size()),
+    _eigenstrains_old(_eigenstrain_names.size()),                                 
     _state_var(declareProperty<std::vector<Real> >("state_var")),
     _state_var_old(getMaterialPropertyOld<std::vector<Real> >("state_var")),
     _properties(declareProperty<std::vector<Real> >("properties")),
@@ -59,8 +71,26 @@ DDJ2StressUpdate2::DDJ2StressUpdate2(const InputParameters & parameters) :
     _strain_increment(getMaterialPropertyByName<RankTwoTensor>(_base_name + "strain_increment")),
     _rotation_increment(getMaterialPropertyByName<RankTwoTensor>(_base_name + "rotation_increment")),
     _stress_old(getMaterialPropertyOld<RankTwoTensor>(_base_name + "stress")),
-    _Cel_cp(declareProperty<RankFourTensor>("Cel_cp"))
+    _Cel_cp(declareProperty<RankFourTensor>("Cel_cp")),
+    _d_name(coupledName("phase_field", 0)),
+    _decomposition(getParam<MooseEnum>("decomposition").getEnum<Decomposition>()),
+    _psie_name(_base_name + getParam<MaterialPropertyName>("elastic_strain_energy")),
+    _psie(declareADProperty<Real>(_psie_name)),
+    _psie_active(declareADProperty<Real>(_psie_name + "_active")),
+    _dpsie_dd(declareADProperty<Real>(derivativePropertyName(_psie_name, {_d_name}))),
+    _psip_name(_base_name + getParam<MaterialPropertyName>("plastic_strain_energy")),
+    _psip(declareADProperty<Real>(_psip_name)),
+    _psip_active(declareADProperty<Real>(_psip_name + "_active")),
+    _dpsip_dd(declareADProperty<Real>(derivativePropertyName(_psip_name, {_d_name}))),
+    _g_name(_base_name +  getParam<MaterialPropertyName>("degradation_function")),
+    _g(getADMaterialProperty<Real>(_g_name)),
+    _dg_dd(getADMaterialProperty<Real>(derivativePropertyName(_g_name, {_d_name}))), 
+    _heat(declareADProperty<Real>("plastic_heat_generation"))    
 {
+  for (auto i : make_range(_eigenstrain_names.size())) {
+    _eigenstrains[i] = &getMaterialProperty<RankTwoTensor>(_eigenstrain_names[i]);
+    _eigenstrains_old[i] = &getMaterialPropertyOld<RankTwoTensor>(_eigenstrain_names[i]);
+  }  
 }
 
 DDJ2StressUpdate2::~DDJ2StressUpdate2()
@@ -386,7 +416,7 @@ void DDJ2StressUpdate2::computeQpStress()
 
   }  
 
-  // // Initialize ISOTROPIC 4th rank elastic stiffness tensor
+  // Initialize ISOTROPIC 4th rank elastic stiffness tensor
   for (unsigned int i = 0; i < 3; i++) {
     for (unsigned int j = 0; j < 3; j++) {
       for (unsigned int k = 0; k < 3; k++) {
@@ -431,17 +461,33 @@ void DDJ2StressUpdate2::computeQpStress()
   // Initialize number of sub-increments.  Note that the subincrement initially equals the total increment. This remains the case unless the process starts to diverge.
   unsigned int N_incr, N_incr_total, iNR, N_ctr;
   Real dt_incr, depdse;
-  RankTwoTensor dfgrd0, dfgrd1;
+  RankTwoTensor dfgrd0, dfgrd1, Ftheta, Ftheta_old;
+  RankTwoTensor total_eigenstrain, total_eigenstrain_old;
   Real array1[3][3], array2[3][3];
   Real array1_matrix[3][3], array2_matrix[3][3];
 
   bool converged, improved;
 
+// Initialize deformation gradients for beginning and end of subincrement.
+  for (auto i : make_range(_eigenstrain_names.size())) {
+    total_eigenstrain += (*_eigenstrains[i])[_qp];
+    total_eigenstrain_old += (*_eigenstrains_old[i])[_qp];
+  }
+
+  Ftheta.zero();
+  Ftheta_old.zero();
+  for (int i=0; i<3; ++i)
+  {
+      Ftheta(i,i) = sqrt(1.0 + 2.0* total_eigenstrain(i,i));
+      Ftheta_old(i,i) = sqrt(1.0 + 2.0* total_eigenstrain_old(i,i));
+  }
+
+
   Real isubincr = 0;
 
   // Initialize deformation gradients for beginning and end of subincrement.
-  dfgrd0 = _deformation_gradient_old[_qp];
-  dfgrd1 = _deformation_gradient[_qp];
+  dfgrd0 = _deformation_gradient_old[_qp] * Ftheta_old.inverse();;
+  dfgrd1 = _deformation_gradient[_qp]* Ftheta.inverse();;
   F0 = dfgrd0;
   F1 = dfgrd1;
 

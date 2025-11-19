@@ -113,7 +113,9 @@
   [./eeq]
     order = FIRST
     family = MONOMIAL
-  [../]  
+  [../] 
+  [d]
+  [] 
 []
 
 [Physics/SolidMechanics/QuasiStatic]
@@ -291,10 +293,16 @@
     temp = 300 # K
     tol = 5e-7
     EulerAngFileReader = euler_angle    
+    phase_field = d
   [../]
   [./elasticity_tensor]
     type = ComputeCPElasticityTensor
   [../]
+  [degradation]
+    type = NoDegradation
+    phase_field = d
+    property_name = g
+  []    
 []
 
 [Preconditioning]
