@@ -140,7 +140,8 @@
         "ExtraNodesetGenerator.C": "cpp",
         "DDJ2StressUpdate.C": "cpp",
         "DDJ2StressUpdate copy.C": "cpp",
-        "DDJ2StressUpdate2.C": "cpp"
+        "DDJ2StressUpdate2.C": "cpp",
+        "StateVariable.C": "cpp"
     },
     "C_Cpp.errorSquiggles": "enabled",
     "[moose]": {

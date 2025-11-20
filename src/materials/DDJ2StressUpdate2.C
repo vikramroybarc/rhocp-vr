@@ -170,7 +170,10 @@ void DDJ2StressUpdate2::computeQpStress()
   Real residual; // residual during Newton-Raphson iteration
   Real del_epsilon, del_epsilon_old; // current and previous values of gamma_dot
 
-  std::vector<Real> sddsm(_num_slip_sys); // stress_dot_dot_schmid_matrix
+  std::vector<Real> sddsm(_num_slip_sys); // stress_dot_dot_schmid_matrix    
+  // Old Elastic and Plastic Energies
+  Real psie_active0, psip_active0;
+
 
   // Our model is based on V.R decomposition as opposed to MOOSE's R.U decomposition of the deformation gradient
   // F = V.R = R.U
@@ -312,6 +315,13 @@ void DDJ2StressUpdate2::computeQpStress()
       bstress0(i,j) = 0.0e0;
     }
   }
+
+   // Initialize Active Work densities
+  _psie_active[_qp] = 0;
+  _psip_active[_qp] = 0;
+  psie_active0 = 0;
+  psip_active0 = 0;  
+
   }
   //  End of initializations.  Read in internal variables
 
@@ -390,7 +400,11 @@ void DDJ2StressUpdate2::computeQpStress()
       }
     }
 
-    // todo Add Elastic and Plastic Energies
+    // Read Elastic and Plastic Energies SDV 61 & 62
+    n = n+1;
+    psie_active0  = _state_var[_qp][n];
+    n = n+1;
+    psip_active0  = _state_var[_qp][n];
 
 
 
@@ -1000,6 +1014,7 @@ void DDJ2StressUpdate2::computeQpStress()
   }
 
   _stress[_qp] = sig;
+  computeCauchyStress(F_el, C, converged);
 
   // checkpoint("Storing ISVs")
   int n = -1;
@@ -1099,6 +1114,18 @@ void DDJ2StressUpdate2::computeQpStress()
       _state_var[_qp][n] = bstress(i,j);
     }
   }
+
+  // Store Elastic and Plastic Work Densities
+   // Store Plastic work density SDV 61 & 62
+  _psip_active[_qp] = psip_active0;
+  _psip_active[_qp] =  _psip_active[_qp] + M * TQfact * s_a * abs(gamma_dot_trial) * _dt;    
+  n = n+1; //SDV61
+  _state_var[_qp][n] = MetaPhysicL::raw_value(_psie_active[_qp]);
+
+  n = n+1; //SDV62
+  _state_var[_qp][n] = MetaPhysicL::raw_value(_psip_active[_qp]);
+  _psip[_qp] = _psip_active[_qp]*_g[_qp];
+  _dpsip_dd[_qp] = _dg_dd[_qp] * _psip[_qp];  
 
   // elasticity tensor
   for (unsigned int i = 0; i < 3; ++i){
@@ -1420,6 +1447,7 @@ void DDJ2StressUpdate2::assignProperties(){
   k_D = _properties[_qp][24];  // Immobile dislocation evolution dynamic recovery constant
   k_bs1 = _properties[_qp][25];  // Backstress evolution constant 1
   k_bs2 = _properties[_qp][26];  // Backstress evolution constant 2
+  TQfact = _properties[_qp][27];  // Taylor Quinney Factor
 
   B_k = 1.3806503e-23;  // Boltzmann constant
   freq = 1e13;  // Debye frequency

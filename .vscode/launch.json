@@ -10,7 +10,7 @@
         "program": "${workspaceFolder}/rhocp-dbg",
         "args": [
             "-i",
-            "examples/PF/64g64e/bcc_pxtal.i"
+            "examples/PF/64g64e_J2Model/bcc_pxtal.i"
         ],
         "stopAtEntry": false,
         "cwd": "${workspaceRoot}",

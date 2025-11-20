@@ -168,34 +168,34 @@ protected:
 
   // Variables in Props File
   Real 
-  YM, 
-  YM_perK, 
-  poisson_ratio, 
-  poisson_ratio_perK, 
-  G, 
-  G_perK, 
-  b_mag, 
-  gammadot0g, 
-  enthalpy_const, 
-  p, 
-  q, 
-  p0, 
-  tau0, 
-  hp_coeff, 
-  grain_size, 
-  frictional_stress, 
-  k_rho, 
-  k_I, 
-  Alatent, 
-  rho_m_zero, 
-  rho_i_zero, 
-  d_disl_zero, 
-  k_M, 
-  R_c, 
-  k_ann, 
-  k_D, 
-  k_bs1, 
-  k_bs2;
+  YM,                                                           // 1
+  YM_perK,                                                      // 2
+  poisson_ratio,                                                // 3  
+  poisson_ratio_perK,                                           // 4
+  G,                                                            // 5
+  G_perK,                                                       // 6
+  b_mag,                                                        // 7
+  gammadot0g,                                                   // 8
+  enthalpy_const,                                               // 9  
+  p,                                                            // 10
+  q,                                                            // 11
+  tau0,                                                         // 12
+  hp_coeff,                                                     // 13
+  grain_size,                                                   // 14
+  frictional_stress,                                            // 15  
+  p0,                                                           // 16    
+  k_rho,                                                        // 17  
+  k_I,                                                          // 18
+  rho_m_zero,                                                   // 19 
+  rho_i_zero,                                                   // 20
+  d_disl_zero,                                                  // 21
+  k_M,                                                          // 22
+  R_c,                                                          // 23
+  k_ann,                                                        // 24
+  k_D,                                                          // 25
+  k_bs1,                                                        // 26
+  k_bs2,                                                        // 27   
+  TQfact;                                                       // 28 Taylor Quiney Factor
   
   Real B_k, freq;
 };

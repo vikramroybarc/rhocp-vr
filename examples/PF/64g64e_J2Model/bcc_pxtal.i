@@ -116,6 +116,14 @@
   [../] 
   [d]
   [] 
+  [psi_e]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [psi_p]
+    order = CONSTANT
+    family = MONOMIAL
+  []    
 []
 
 [Physics/SolidMechanics/QuasiStatic]
@@ -201,6 +209,18 @@
     sdv_id = 38
     execute_on = timestep_end
   [../]
+  [./psie]
+    type = StateVariable
+    sdv_id = 61
+    variable = psi_e
+    execute_on = TIMESTEP_END
+  []
+  [psip]
+    type = StateVariable
+    sdv_id = 62
+    variable = psi_p
+    execute_on = TIMESTEP_END
+  []         
 []
 
 
@@ -288,8 +308,8 @@
     num_slip_sys = 24
     slipSysFile = bcc_slip_sys1.in    
     propsFile = j2_props.in
-    num_state_vars = 60
-    num_props = 27
+    num_state_vars = 62
+    num_props = 28
     temp = 300 # K
     tol = 5e-7
     EulerAngFileReader = euler_angle    
@@ -387,6 +407,14 @@
     type = ElementAverageValue
     variable = Ep_eff
   [../]
+  [psie]
+    type = ElementAverageValue
+    variable = psi_e    
+  []
+  [psip]
+    type = ElementAverageValue
+    variable = psi_p
+  []       
 []
 
 [Outputs]
